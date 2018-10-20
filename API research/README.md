@@ -5,7 +5,8 @@
 ## Выгрузка курса
 Используется скрипт **get_steps.py** следующим образом:
 
-    $ python3 get_steps.py <client_id> <client_secret> <course_id>
+     $ python3 get_steps.py <client_id> <client_secret> <course_id>
+
 Где:
 
  - ***client_d***, ***client_secret*** - соответствующие ключи пользователя
