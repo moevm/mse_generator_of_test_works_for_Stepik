@@ -64,31 +64,30 @@ if __name__ == "__main__":
         for unit in units:  # Итерация по урокам
             lesson_id = unit['lesson']
             lesson = fetch_object('lesson', lesson_id)
-            print(lesson)
 
             step_ids = lesson['steps']
             steps = fetch_objects('step', step_ids)  # Степы
 
             for step in steps:  # Итерация по степам
-                if step['block']['name'] == 'choice':  # В этом месте можно отбирать нужные степы(по типу задания)
-                    step_source = fetch_object('step-source', step['id'])
-                    path = [
-                        '{} {}'.format(str(course['id']).zfill(2), course['title']),
-                        '{} {}'.format(str(section['position']).zfill(2), section['title']),
-                        '{} {}'.format(str(unit['position']).zfill(2), lesson['title']),
-                        '{}_{}_{}.step'.format(lesson['id'], str(step['position']).zfill(2), step['block']['name'])
-                    ]
-                    try:
-                        os.makedirs(os.path.join(os.curdir, *path[:-1]))
-                    except:
-                        pass
-                    filename = os.path.join(os.curdir, *path)
-                    f = open(filename, 'w')
-                    data = {
-                        'block': step_source['block'],
-                        'id': str(step['id']),
-                        'time': datetime.datetime.now().isoformat()
-                    }
-                    f.write(json.dumps(data))
-                    f.close()
-                    print(filename)
+                #if step['block']['name'] == 'choice':  # В этом месте можно отбирать нужные степы(по типу задания)
+                step_source = fetch_object('step-source', step['id'])
+                path = [
+                    '{} {}'.format(str(course['id']).zfill(2), course['title']),
+                    '{} {}'.format(str(section['position']).zfill(2), section['title']),
+                    '{} {}'.format(str(unit['position']).zfill(2), lesson['title']),
+                    '{}_{}_{}.step'.format(lesson['id'], str(step['position']).zfill(2), step['block']['name'])
+                ]
+                try:
+                    os.makedirs(os.path.join(os.curdir, *path[:-1]))
+                except:
+                    pass
+                filename = os.path.join(os.curdir, *path)
+                f = open(filename, 'w')
+                data = {
+                    'block': step_source['block'],
+                    'id': str(step['id']),
+                    'time': datetime.datetime.now().isoformat()
+                }
+                f.write(json.dumps(data))
+                f.close()
+                print(filename)
