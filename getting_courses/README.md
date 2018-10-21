@@ -10,3 +10,9 @@
 
     from getting_courses import get_admin_courses
     courses = get_admin_courses(token)
+
+## Нужные ключи словаря курса:
+
+1. Id курса: *"id"*
+
+2. Имя курса: *"title"*
