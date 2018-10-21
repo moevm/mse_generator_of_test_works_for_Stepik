@@ -12,7 +12,7 @@ body {
 }
 
 .user-page {
-    width: 460px;
+    width: 600px;
     padding: 8% 0 0;
     margin: auto;
 }
@@ -21,7 +21,7 @@ body {
     position: relative;
     z-index: 1;
     background: #FFFFFF;
-    max-width: 460px;
+    max-width: 600px;
     margin: 0 auto 100px;
     padding: 45px;
     text-align: center;
@@ -50,4 +50,10 @@ body {
 #course-selection {
     padding: 25px;
     width: 100%;
+}
+
+#select-button {
+    margin-top: 40px;
+    margin-left: 25%;
+    margin-right: 25%;
 }
