@@ -64,7 +64,6 @@ if __name__ == "__main__":
     # getting user id
     r = json.loads(requests.get('https://stepik.org/api/stepics/1', headers={'Authorization': 'Bearer ' + token}).text)
     user_id = r['users'][0]['id']
-    print(user_id)
 
     # Retrieving course information
     courses = get_enrolled_courses()
