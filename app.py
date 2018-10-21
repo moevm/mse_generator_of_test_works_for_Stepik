@@ -45,5 +45,10 @@ def course():
     else:
         return redirect(url_for('/'))
 
+@app.route('/logout')
+def logout():
+    session.pop('token', None)
+    return redirect(url_for('/'))
+
 if __name__ == '__main__':
     app.run(debug=True)
