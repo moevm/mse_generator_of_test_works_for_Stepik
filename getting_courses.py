@@ -43,7 +43,6 @@ def get_enrolled_courses():
 
 # Return list of courses dict
 def get_admin_courses(token):
-
     # getting user id
     r = json.loads(requests.get('https://stepik.org/api/stepics/1', headers={'Authorization': 'Bearer ' + token}).text)
     user_id = r['users'][0]['id']
