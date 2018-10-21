@@ -4,6 +4,7 @@ from flask import Flask, render_template, request, send_file, session, redirect,
 import user
 import download
 import md_export
+import os
 
 app = Flask(__name__)
 app.secret_key = 'A0Zr37w/3rX R~XHH-jmm]LSX/,?RT'
@@ -30,25 +31,24 @@ def courses():
 
         return render_template('user_info.html', courses=courses, name=name)
     else:
-        return redirect(url_for('/'))
+        return redirect(url_for('index'))
 
 @app.route('/course', methods=['POST'])
 def course():
     if 'token' in session:
-        download.download_course(session['token'], request.form['id'])
-        # with open('test.md', mode='w', encoding='utf8') as fp:
-        #     md_export.choise(fp, '48418/01 Тестовый Модуль 1/01 Тестовый Урок 1.1/183092_02_choice.step', 1)
-        #     md_export.number(fp, '48418/01 Тестовый Модуль 1/01 Тестовый Урок 1.1/183092_03_number.step', 2)
-        #     md_export.number(fp, '48418/01 Тестовый Модуль 1/01 Тестовый Урок 1.1/183092_04_string.step', 3)
-
-        return send_file('test.md', mimetype='text/markdown')
+        path = download.download_course(session['token'], request.form['id'])
+        return 'Downloaded course!'
     else:
-        return redirect(url_for('/'))
+        return redirect(url_for('index'))
+
+@app.route('/generate', methods=['POST'])
+def generate():
+    return send_file('tmp.pdf', mimetype='application/pdf')
 
 @app.route('/logout')
 def logout():
     session.pop('token', None)
-    return redirect(url_for('/'))
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(debug=True)
