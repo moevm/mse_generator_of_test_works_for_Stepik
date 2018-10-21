@@ -77,20 +77,19 @@ if __name__ == "__main__":
         f.write('<title>Courses enrolled by user</title>')
         f.write('</head>')
         f.write('<body>')
-        var = 1
+
         for course in courses:
-            if var == 2:
-                with open('test.json', 'w', encoding='utf-8') as ftest:
-                    ftest.write(json.dumps(course))
-            var += 1
-            f.write('<h1><a href="https://stepik.org/course/{0}">{1}</a></h1>'.format(course['slug'], course['title']))
-            f.write('<p>{}</p>'.format(course['summary']))
-            if course['sections']:
-                f.write('<p>Course sections: </p>')
-                f.write('<ul>')
-                for section in course['sections']:
-                    f.write('<li>{}</li>'.format(section['title']))
-                f.write('</ul>')
-            f.write('<hr>')
+            for instructor_id in course['instructors']:
+                if instructor_id == user_id:
+                    f.write('<h1><a href="https://stepik.org/course/{0}">{1}</a></h1>'.format(course['slug'], course['title']))
+                    f.write('<p>{}</p>'.format(course['summary']))
+                    if course['sections']:
+                        f.write('<p>Course sections: </p>')
+                        f.write('<ul>')
+                        for section in course['sections']:
+                            f.write('<li>{}</li>'.format(section['title']))
+                        f.write('</ul>')
+                    f.write('<hr>')
+                    break
         f.write('</body>')
         f.write('</html>')
