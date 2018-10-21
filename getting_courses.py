@@ -61,11 +61,10 @@ if __name__ == "__main__":
     if not token:
         raise RuntimeWarning('Client id/secret is probably incorrect')
 
-    resp1 = json.loads(requests.get('https://stepik.org/api/stepics/1', headers={'Authorization': 'Bearer ' + token}).text)
-    user = resp1['users']
-
-    with open('user.json', 'w', encoding='utf-8') as ftest:
-        ftest.write(json.dumps(user))
+    # getting user id
+    r = json.loads(requests.get('https://stepik.org/api/stepics/1', headers={'Authorization': 'Bearer ' + token}).text)
+    user = r['users'][0]['id']
+    print(user)
 
     # Retrieving course information
     courses = get_enrolled_courses()
