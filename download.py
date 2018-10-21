@@ -49,13 +49,8 @@ def download_course(token, course_id):
                 step_source = fetch_object('step-source', step['id'], token=token)
                 path = [
                     '{}'.format(str(course['id']).zfill(2)),
-<<<<<<< HEAD
-                    '{}{}'.format(str(section['position']).zfill(2), str(section['title']).replace(' ','')),
-                    '{}{}'.format(str(unit['position']).zfill(2), str(lesson['title']).replace(' ','')),
-=======
                     '{}_{}'.format(str(section['position']).zfill(2), str(section['title']).replace(' ','_')),
                     '{}_{}'.format(str(unit['position']).zfill(2), str(lesson['title']).replace(' ','_')),
->>>>>>> 96cd4fed6cfa10f52a0c4aadc578af3de0ba9bde
                     '{}_{}_{}.step'.format(lesson['id'], str(step['position']).zfill(2), step['block']['name'])
                 ]
                 try:
