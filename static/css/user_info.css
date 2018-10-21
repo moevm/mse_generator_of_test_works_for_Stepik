@@ -57,3 +57,8 @@ body {
     margin-left: 25%;
     margin-right: 25%;
 }
+
+#logout {
+    margin-left: 90%;
+    cursor: pointer;
+}
