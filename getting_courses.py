@@ -2,6 +2,7 @@
 
 import requests
 import sys
+import json
 
 # 3. Call API (https://stepik.org/api/docs/) using this token.
 # Generator definition for iterating over pages
@@ -71,7 +72,12 @@ if __name__ == "__main__":
         f.write('<title>Courses enrolled by user</title>')
         f.write('</head>')
         f.write('<body>')
+        var = 1
         for course in courses:
+            if var == 2:
+                with open('test.json', 'w', encoding='utf-8') as ftest:
+                    ftest.write(json.dumps(course))
+            var += 1
             f.write('<h1><a href="https://stepik.org/course/{0}">{1}</a></h1>'.format(course['slug'], course['title']))
             f.write('<p>{}</p>'.format(course['summary']))
             if course['sections']:
