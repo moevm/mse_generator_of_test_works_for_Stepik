@@ -1,10 +1,9 @@
 # coding=utf-8
 
 import requests
-import sys
 import json
 
-# 3. Call API (https://stepik.org/api/docs/) using this token.
+# 3. Call API (https://stepik.org/api/docs/) using token.
 # Generator definition for iterating over pages
 def list_pages(api_url, obj_class):
     has_next = True
@@ -42,9 +41,8 @@ def get_enrolled_courses():
         course['sections'] = get_sections(course['sections'])
     return courses
 
-
+# Returning list of courses dict
 def get_admin_courses(token):
-
     # getting user id
     r = json.loads(requests.get('https://stepik.org/api/stepics/1', headers={'Authorization': 'Bearer ' + token}).text)
     user_id = r['users'][0]['id']
@@ -60,23 +58,3 @@ def get_admin_courses(token):
                 break
 
     return admin_courses
-
-if __name__ == "__main__":
-    # Enter parameters below:
-    # 1. Get your keys at https://stepik.org/oauth2/applications/ (client type = confidential,
-    # authorization grant type = client credentials)
-    client_id = sys.argv[1]
-    client_secret = sys.argv[2]
-    api_host = 'https://stepik.org'
-
-    # 2. Get a token
-    auth = requests.auth.HTTPBasicAuth(client_id, client_secret)
-    resp = requests.post('https://stepik.org/oauth2/token/',
-                         data={'grant_type': 'client_credentials'},
-                         auth=auth
-                         )
-    token = resp.json().get('access_token')
-    if not token:
-        raise RuntimeWarning('Client id/secret is probably incorrect')
-
-    print(get_admin_courses(token))
