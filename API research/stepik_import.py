@@ -4,7 +4,6 @@ import requests
 import datetime
 import sys
 
-# 3. Call API (https://stepik.org/api/docs/) using this token.
 def fetch_object(obj_class, obj_id, token):
     api_url = '{}/api/{}s/{}'.format('https://stepik.org', obj_class, obj_id)
     response = requests.get(api_url,
