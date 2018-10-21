@@ -3,9 +3,14 @@
 import requests
 import json
 
+
+token = ''
+
+
 # 3. Call API (https://stepik.org/api/docs/) using token.
 # Generator definition for iterating over pages
 def list_pages(api_url, obj_class):
+    print(token)
     has_next = True
     page = 1
     if '?' in api_url:
@@ -41,10 +46,13 @@ def get_enrolled_courses():
         course['sections'] = get_sections(course['sections'])
     return courses
 
+
 # Return list of courses dict
-def get_admin_courses(token):
+def get_admin_courses(tkn):
+    global token
+    token = tkn
     # getting user id
-    r = json.loads(requests.get('https://stepik.org/api/stepics/1', headers={'Authorization': 'Bearer ' + token}).text)
+    r = json.loads(requests.get('https://stepik.org/api/stepics/1', headers={'Authorization': 'Bearer ' + tkn}).text)
     user_id = r['users'][0]['id']
 
     # Retrieving course information
@@ -58,4 +66,3 @@ def get_admin_courses(token):
                 break
 
     return admin_courses
-
