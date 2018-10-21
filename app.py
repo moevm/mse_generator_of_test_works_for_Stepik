@@ -1,5 +1,9 @@
+import sys
+
 from flask import Flask, render_template, request
 import requests
+import getting_courses
+from getting_courses import getting_courses
 
 app = Flask(__name__)
 
@@ -21,12 +25,8 @@ def login():
     if not token:
         return 'Unable to authorize with provided credentials'
     else:
-        api_url = 'https://stepik.org/api/stepics/1'  # should be stepic with "c"!
-        response = requests.get(api_url, headers={'Authorization': 'Bearer '+ token}).json()
-
-        user = response['users']
-        name = user[0]['first_name'] + ' ' + user[0]['last_name']
-        return name
+        courses = getting_courses.get_admin_courses(token)
+        return render_template('user_info.html', courses=courses)
 
 if __name__ == '__main__':
     app.run(debug=True)
