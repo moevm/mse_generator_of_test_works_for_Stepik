@@ -22,7 +22,7 @@ def list_pages(api_url, obj_class):
 
 # Access to any API method
 def fetch_object(obj_class, query_string=''):
-    api_url = '{}/api/{}{}'.format(api_host, obj_class, query_string)
+    api_url = '{}/api/{}{}'.format('https://stepik.org', obj_class, query_string)
     response = list_pages(api_url, obj_class)
     return [obj for page in response for obj in page]
 
@@ -41,8 +41,9 @@ def get_enrolled_courses():
         course['sections'] = get_sections(course['sections'])
     return courses
 
-# Returning list of courses dict
+# Return list of courses dict
 def get_admin_courses(token):
+
     # getting user id
     r = json.loads(requests.get('https://stepik.org/api/stepics/1', headers={'Authorization': 'Bearer ' + token}).text)
     user_id = r['users'][0]['id']
@@ -58,3 +59,4 @@ def get_admin_courses(token):
                 break
 
     return admin_courses
+
