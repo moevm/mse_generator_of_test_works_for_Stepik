@@ -43,6 +43,24 @@ def get_enrolled_courses():
     return courses
 
 
+def get_admin_courses(token):
+
+    # getting user id
+    r = json.loads(requests.get('https://stepik.org/api/stepics/1', headers={'Authorization': 'Bearer ' + token}).text)
+    user_id = r['users'][0]['id']
+
+    # Retrieving course information
+    courses = get_enrolled_courses()
+    admin_courses = []
+
+    for course in courses:
+        for instructor_id in course['instructors']:
+            if instructor_id == user_id:
+                admin_courses.append(course)
+                break
+
+    return admin_courses
+
 if __name__ == "__main__":
     # Enter parameters below:
     # 1. Get your keys at https://stepik.org/oauth2/applications/ (client type = confidential,
@@ -61,18 +79,4 @@ if __name__ == "__main__":
     if not token:
         raise RuntimeWarning('Client id/secret is probably incorrect')
 
-    # getting user id
-    r = json.loads(requests.get('https://stepik.org/api/stepics/1', headers={'Authorization': 'Bearer ' + token}).text)
-    user_id = r['users'][0]['id']
-
-    # Retrieving course information
-    courses = get_enrolled_courses()
-    admin_courses = []
-
-    for course in courses:
-        for instructor_id in course['instructors']:
-            if instructor_id == user_id:
-                admin_courses.append(course)
-                break
-
-    print(admin_courses)
+    print(get_admin_courses(token))
