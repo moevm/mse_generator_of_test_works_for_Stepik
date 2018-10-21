@@ -25,7 +25,7 @@ def list_pages(api_url, obj_class):
 def fetch_object(obj_class, query_string=''):
     api_url = '{}/api/{}{}'.format(api_host, obj_class, query_string)
     response = list_pages(api_url, obj_class)
-    return [obj for page in response for obj in page]       # Example of using generator
+    return [obj for page in response for obj in page]
 
 
 # Information about course sections
@@ -60,6 +60,12 @@ if __name__ == "__main__":
     token = resp.json().get('access_token')
     if not token:
         raise RuntimeWarning('Client id/secret is probably incorrect')
+
+    resp1 = json.loads(requests.get('https://stepik.org/api/stepics/1', headers={'Authorization': 'Bearer ' + token}).text)
+    user = resp1['users']
+
+    with open('user.json', 'w', encoding='utf-8') as ftest:
+        ftest.write(json.dumps(user))
 
     # Retrieving course information
     courses = get_enrolled_courses()
