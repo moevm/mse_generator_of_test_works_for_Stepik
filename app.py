@@ -56,6 +56,8 @@ def course(course_id):
 
 @app.route('/generate', methods=['POST'])
 def generate():
+    #TODO generating
+    # return html with generated test
     return send_file('tmp.html', mimetype='text/html')
 
 @app.route('/logout')
