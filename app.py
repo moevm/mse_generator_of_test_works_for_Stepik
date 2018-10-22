@@ -5,6 +5,7 @@ import user
 import download
 import md_export
 import os
+import markdown
 
 app = Flask(__name__)
 app.secret_key = 'A0Zr37w/3rX R~XHH-jmm]LSX/,?RT'
@@ -33,17 +34,29 @@ def courses():
     else:
         return redirect(url_for('index'))
 
-@app.route('/course', methods=['POST'])
-def course():
+@app.route('/get_course', methods=['POST'])
+def get_course():
     if 'token' in session:
-        path = download.download_course(session['token'], request.form['id'])
-        return 'Downloaded course!'
+        return redirect(url_for('course', course_id=request.form['id']))
+    else:
+        return redirect(url_for('index'))
+
+@app.route('/course/<course_id>')
+def course(course_id):
+    if 'token' in session:
+        path = download.download_course(session['token'], course_id)
+
+        with open('tmp.md', mode='w', encoding='utf8') as tmp:
+            tmp.write('#Здесь будут настройки генерации контрольной\n')
+        markdown.markdownFromFile(input='tmp.md', output='tmp.html')
+
+        return send_file('tmp.html', mimetype='text/html')
     else:
         return redirect(url_for('index'))
 
 @app.route('/generate', methods=['POST'])
 def generate():
-    return send_file('tmp.pdf', mimetype='application/pdf')
+    return send_file('tmp.html', mimetype='text/html')
 
 @app.route('/logout')
 def logout():
