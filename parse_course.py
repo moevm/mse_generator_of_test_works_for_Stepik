@@ -6,17 +6,40 @@ import sys
 
 
 class Course():
-    def __init__(self, id):
+    def __init__(self, id, name):
         self.id = id
+        self.name = name
         self.modules = []  # List of Module objects
+        self.path = ''
+
+    def get_name(self):
+        return self.name
+
+    def get_modules(self):
+        return self.modules
+
+    def set_path(self, path):
+        self.path = path
+
+    def get_path(self):
+        return self.path
 
 
 class Module():
     def __init__(self, name):
         self.name = name
-        self.path = 'path'
+        self.path = ''
         self.lessons = []  # list of Lesson object
         self.isChoose = False
+
+    def get_name(self):
+        return self.name
+
+    def set_path(self, path):
+        self.path = path
+
+    def get_path(self):
+        return self.path
 
 
 class Lesson():
