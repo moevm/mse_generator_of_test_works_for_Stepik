@@ -25,6 +25,11 @@ body {
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
 
+input{
+    display: block;
+    text-align: center;
+}
+
 .count1, .count2 {
     color: #000;
     display: inline-block;
