@@ -55,13 +55,14 @@ def course():
         if not course_id:
             return redirect(url_for('courses'))
         else:
-            if os.path.exists(str(course_id)) and os.path.isdir(str(course_id)):
-                return 'Already downloaded ' + str(course_id)
-            else:
-                return 'Will be downloaded'
+            if not os.path.exists(str(course_id)) and os.path.isdir(str(course_id)):
+                course = download.download_course(session['token'], course_id)
+                return 'Will be downloaded!'
                 #TODO there will be parsing of course
-                #path = download.download_course(session['token'], course_id)
-                # render('course.html', course=course)
+            else:
+                return 'Downloaded!'
+
+            # render('course.html', course=course)
     else:
         return redirect(url_for('index'))
 
