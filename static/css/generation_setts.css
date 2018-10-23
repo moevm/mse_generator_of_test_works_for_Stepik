@@ -30,6 +30,11 @@ input {
     text-align: center;
 }
 
+#logout {
+    margin-left: 95%;
+    cursor: pointer;
+}
+
 .count1, .count2 {
     color: #000;
     display: inline-block;
