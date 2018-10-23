@@ -7,6 +7,28 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('.count1').prop('disabled', true);
+            $('.count2').prop('disabled', true);
+            function setSlider(count, btn_l, btn_r, start, finish) {
+                $(document).on('click',`.${btn_l}`,function(){
+                    $(`.${count}`).val(parseInt($(`.${count}`).val()) + 1 );
+                    if ($(`.${count}`).val() == finish + 1) {
+                        $(`.${count}`).val(finish);
+                    }
+                });
+                $(document).on('click',`.${btn_r}`,function(){
+                    $(`.${count}`).val(parseInt($(`.${count}`).val()) - 1 );
+                    if ($(`.${count}`).val() == start - 1) {
+                        $(`.${count}`).val(start);
+                    }
+                });
+            }
+            setSlider('count1', 'plus1', 'minus1', 1, 4);
+            setSlider('count2', 'plus2', 'minus2', 1, 20);
+        });
+    </script>
 </head>
 <body>
     <div class="generation-setts-page">
