@@ -35,6 +35,10 @@ input {
     cursor: pointer;
 }
 
+#get-back {
+    color: #4CAF50;
+}
+
 .count1, .count2 {
     color: #000;
     display: inline-block;

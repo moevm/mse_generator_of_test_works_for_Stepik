@@ -34,10 +34,11 @@
 <body>
     <div class="generation-setts-page">
         <form role="form" class="gen-setts-form" action="{{ url_for('generate') }}" method="POST">
+            <a id="get-back" href={{ url_for('') }}>
+                <i class="material-icons">undo</i>
+            Предыдущая страница
+            </a>
             <div class="top-buttons">
-                <a href={{ url_for('') }}>
-                    <i class="material-icons" id="get-back">undo</i>
-                </a>
                 <a href={{ url_for('logout') }}>
                     <img id="logout" src="../static/icons/logout_icon.png" width="48px" height="48px">
                 </a>
