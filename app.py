@@ -34,23 +34,18 @@ def courses():
     else:
         return redirect(url_for('index'))
 
-@app.route('/get_course', methods=['POST'])
-def get_course():
+@app.route('/course')
+def course():
     if 'token' in session:
-        return redirect(url_for('course', course_id=request.form['id']))
-    else:
-        return redirect(url_for('index'))
-
-@app.route('/course/<course_id>')
-def course(course_id):
-    if 'token' in session:
-        path = download.download_course(session['token'], course_id)
-
-        with open('tmp.md', mode='w', encoding='utf8') as tmp:
-            tmp.write('#Здесь будут настройки генерации контрольной\n')
-        markdown.markdownFromFile(input='tmp.md', output='tmp.html')
-
-        return send_file('tmp.html', mimetype='text/html')
+        course_id = request.args.get('id', default=None, type=int)
+        if not course_id:
+            return redirect(url_for('courses'))
+        else:
+            if os.path.exists(str(course_id)) and os.path.isdir(str(course_id)):
+                return 'Already downloaded ' + str(course_id)
+            else:
+                return 'Will be downloaded'
+                #path = download.download_course(session['token'], course_id)
     else:
         return redirect(url_for('index'))
 
