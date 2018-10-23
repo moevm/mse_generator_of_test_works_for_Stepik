@@ -1,16 +1,31 @@
 import sys
 
-from flask import Flask, render_template, request, send_file, session, redirect, url_for
+from flask import Flask, render_template, request, send_file, session, redirect, url_for, make_response
+from functools import wraps, update_wrapper
+from datetime import datetime
 import user
 import download
 import md_export
 import os
 import markdown
 
+def nocache(view):
+    @wraps(view)
+    def no_cache(*args, **kwargs):
+        response = make_response(view(*args, **kwargs))
+        response.headers['Last-Modified'] = datetime.now()
+        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '-1'
+        return response
+        
+    return update_wrapper(no_cache, view)
+
 app = Flask(__name__)
 app.secret_key = 'A0Zr37w/3rX R~XHH-jmm]LSX/,?RT'
 
 @app.route('/')
+@nocache
 def index():
     if 'token' in session:
         return redirect(url_for('courses'))
@@ -28,6 +43,7 @@ def login():
         return redirect(url_for('courses'))
 
 @app.route('/courses')
+@nocache
 def courses():
     if 'token' in session:
         if 'courses' in session and 'name' in session:
@@ -52,6 +68,7 @@ def courses():
         return redirect(url_for('index'))
 
 @app.route('/course')
+@nocache
 def course():
     if 'token' in session:
         course_id = request.args.get('id', default=None, type=int)
