@@ -183,7 +183,7 @@ def download_course(token, course_id):
             steps = fetch_objects('step', step_ids, token=token)  # Степы
 
             for step in steps:  # Итерация по степам
-                if step['block']['name'] == ('choice' or 'number' or 'string'):
+                if step['block']['name'] in ('choice', 'number', 'string'):
                     _step = Step(_lesson, step['block']['name'])
                     _lesson.steps.append(_step)
                     step_source = fetch_object('step-source', step['id'], token=token)
