@@ -5,6 +5,7 @@
     <title>Страница настройки генерации</title>
     <link rel="stylesheet" href="../static/css/generation_setts.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
@@ -33,7 +34,8 @@
 <body>
     <div class="generation-setts-page">
         <form role="form" class="gen-setts-form" action="{{ url_for('generate') }}" method="POST">
-            <div class="logout-button">
+            <div class="top-buttons">
+                <button type="submit" class="btn btn-success"></button>
                 <a href={{ url_for('logout') }}>
                     <img id="logout" src="../static/icons/logout_icon.png" width="48px" height="48px">
                 </a>
