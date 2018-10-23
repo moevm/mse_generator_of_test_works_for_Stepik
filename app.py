@@ -27,8 +27,22 @@ def login():
 @app.route('/courses')
 def courses():
     if 'token' in session:
-        name = user.get_user_name(session['token'])
-        courses = user.get_admin_courses(session['token'])
+        if 'courses' in session and 'name' in session:
+            name = session['name']
+            courses_cookie = session['courses']
+            courses = courses_cookie.split(';')
+            courses = filter(lambda x: len(x) > 0, courses)
+            courses = map(lambda x: {'title' : x.split('=')[0], 'id' : x.split('=')[1]}, courses)
+        else:
+            name = user.get_user_name(session['token'])
+            courses = user.get_admin_courses(session['token'])
+
+            courses_cookie = ''
+            for course in courses:
+                courses_cookie += course['title'] + '=' + str(course['id']) + ';'
+
+            session['courses'] = courses_cookie
+            session['name'] = name
 
         return render_template('user_info.html', courses=courses, name=name)
     else:
@@ -45,7 +59,9 @@ def course():
                 return 'Already downloaded ' + str(course_id)
             else:
                 return 'Will be downloaded'
+                #TODO there will be parsing of course
                 #path = download.download_course(session['token'], course_id)
+                # render('course.html', course=course)
     else:
         return redirect(url_for('index'))
 
@@ -57,7 +73,7 @@ def generate():
 
 @app.route('/logout')
 def logout():
-    session.pop('token', None)
+    session.clear()
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
