@@ -91,3 +91,9 @@ input::-webkit-inner-spin-button {
 input:disabled{
     background: white;
 }
+
+#course-name-label{
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;
+}
