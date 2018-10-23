@@ -34,8 +34,7 @@ class Lesson():
 
 class Step():
     def __init__(self, lesson, type):
-        self.name = 'name'
-        self.path = '<lesson path>/path'
+        self.path = ''
         self.type = type  # string, choise, ...
 
         # True if module parent is choosen
@@ -43,6 +42,15 @@ class Step():
             self.isChoose = True
         else:
             self.isChoose = False
+
+    def get_type(self):
+        return self.type
+
+    def set_path(self, path):
+        self.path = path
+
+    def get_path(self):
+        return self.path
 
 def fetch_object(obj_class, obj_id, token):
     api_url = '{}/api/{}s/{}'.format('https://stepik.org', obj_class, obj_id)
