@@ -22,7 +22,7 @@ class Module():
 class Lesson():
     def __init__(self, module, name):
         self.name = name
-        self.path = '<module path>/path'
+        self.path = ''
         self.steps = []  # list of Step object
 
         # True if module parent is choosen
@@ -30,6 +30,15 @@ class Lesson():
             self.isChoose = True
         else:
             self.isChoose = False
+
+    def get_name(self):
+        return self.name
+
+    def set_path(self, path):
+        self.path = path
+
+    def get_path(self):
+        return self.path
 
 
 class Step():
