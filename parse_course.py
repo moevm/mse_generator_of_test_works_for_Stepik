@@ -12,17 +12,29 @@ class Course():
         self.modules = []  # List of Module objects
         self.path = ''
 
-    def get_name(self):
-        return self.name
-
     def get_modules(self):
         return self.modules
+
+    def get_name(self):
+        return self.name
 
     def set_path(self, path):
         self.path = path
 
     def get_path(self):
         return self.path
+
+    def get_chosen(self):
+        chosen_steps = []
+        for module in self.modules:
+            if module.get_status():
+                for lesson in module.get_lessons():
+                    if lesson.get_status():
+                        for step in lesson.get_steps():
+                            if step.get_status():
+                                chosen_steps.append(step)
+
+        return chosen_steps
 
 
 class Module():
@@ -32,6 +44,9 @@ class Module():
         self.lessons = []  # list of Lesson object
         self.isChoose = False
 
+    def get_lessons(self):
+        return self.lessons
+
     def get_name(self):
         return self.name
 
@@ -41,6 +56,18 @@ class Module():
     def get_path(self):
         return self.path
 
+    def choose(self):
+        self.isChoose = True
+        for lesson in self.lessons:
+            lesson.choose()
+
+    def unchoose(self):
+        self.isChoose = False
+        for lesson in self.lessons:
+            lesson.unchoose()
+
+    def get_status(self):
+        return self.isChoose
 
 class Lesson():
     def __init__(self, module, name):
@@ -54,6 +81,9 @@ class Lesson():
         else:
             self.isChoose = False
 
+    def get_steps(self):
+        return self.steps
+
     def get_name(self):
         return self.name
 
@@ -62,6 +92,19 @@ class Lesson():
 
     def get_path(self):
         return self.path
+
+    def choose(self):
+        self.isChoose = True
+        for step in self.steps:
+            step.choose()
+
+    def unchoose(self):
+        self.isChoose = False
+        for step in self.steps:
+            step.unchoose()
+
+    def get_status(self):
+        return self.isChoose
 
 
 class Step():
@@ -83,6 +126,15 @@ class Step():
 
     def get_path(self):
         return self.path
+
+    def choose(self):
+        self.isChoose = True
+
+    def unchoose(self):
+        self.isChoose = False
+
+    def get_status(self):
+        return self.isChoose
 
 def fetch_object(obj_class, obj_id, token):
     api_url = '{}/api/{}s/{}'.format('https://stepik.org', obj_class, obj_id)
@@ -110,8 +162,7 @@ def fetch_objects(obj_class, obj_ids, token):
 def download_course(token, course_id):
     token = token
     course = fetch_object('course', course_id, token=token)
-    _course = Course(course['id'])
-    print(_course.id)
+    _course = Course(course['id'], course['title'])
     sections = fetch_objects('section', course['sections'], token=token)  # Модули
 
     for section in sections:  # Итерация по модулям
@@ -138,6 +189,16 @@ def download_course(token, course_id):
                     '{}_{}'.format(str(unit['position']).zfill(2), str(lesson['title']).replace(' ','_')),
                     '{}_{}_{}.step'.format(lesson['id'], str(step['position']).zfill(2), step['block']['name'])
                 ]
+
+                if not _step.get_path():
+                    _step.set_path(os.path.join(os.curdir, *path))
+                if not _lesson.get_path():
+                    _lesson.set_path(os.path.join(os.curdir, *path[:3]))
+                if not _module.get_path():
+                    _module.set_path(os.path.join(os.curdir, *path[:2]))
+                if not _course.get_path():
+                    _course.set_path(os.path.join(os.curdir, path[0]))
+
                 try:
                     os.makedirs(os.path.join(os.curdir, *path[:-1]))
                 except:
@@ -151,12 +212,29 @@ def download_course(token, course_id):
                 }
                 f.write(json.dumps(data))
                 f.close()
-                print(filename)
-    dir_path = os.path.join(os.curdir, path[0])
-    for module in _course.modules:
-        print(module.name)
+
+    ####### testing #######
+    _course.get_modules()[0].get_lessons()[1].choose()
+    _course.get_modules()[1].get_lessons()[0].choose()
+
+    print("Course name: ", _course.get_name())
+    print("Course path: ", _course.get_path())
+    for module in _course.get_modules():
+        print('**************************MODULE*************************************')
+        print("--name: ", module.get_name())
+        print("--path: ", module.get_path())
+        print("--status: ", module.get_status())
         for lesson in module.lessons:
-            print("----", lesson.name)
+            print('*************************LESSON***********************')
+            print("----name: ", lesson.get_name())
+            print("----path: ", lesson.get_path())
+            print("----status: ", lesson.get_status())
             for step in lesson.steps:
-                print("--------", step.type)
+                print('*******************STEP*****************************************')
+                print("------type: ", step.get_type())
+                print("------path: ", step.get_path())
+                print("------status: ", step.get_status())
+                print('*************************************************************************')
+    ########################
+
     return _course
