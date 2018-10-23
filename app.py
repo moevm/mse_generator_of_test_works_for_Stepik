@@ -8,6 +8,7 @@ import download
 import md_export
 import os
 import markdown
+import pickle
 
 def nocache(view):
     @wraps(view)
@@ -75,14 +76,15 @@ def course():
         if not course_id:
             return redirect(url_for('courses'))
         else:
-            if not os.path.exists(str(course_id)) and os.path.isdir(str(course_id)):
+            if not os.path.exists(str(course_id)) or not os.path.isdir(str(course_id)):
                 course = download.download_course(session['token'], course_id)
-                return 'Will be downloaded!'
-                #TODO there will be parsing of course
+                with open(os.path.join(str(course_id), 'course_parser.dat'), mode='wb') as f:
+                    pickle.dump(course, f)
             else:
-                return 'Downloaded!'
+                with open(os.path.join(str(course_id), 'course_parser.dat'), mode='rb') as f:
+                    course = pickle.load(f)
 
-            # render('course.html', course=course)
+            return render_template('generation_setts.html', course=course, course_id=course_id)
     else:
         return redirect(url_for('index'))
 
@@ -90,7 +92,15 @@ def course():
 def generate():
     #TODO generating
     # return html with generated test
-    return send_file('tmp.html', mimetype='text/html')
+    with open(os.path.join(request.form['course_id'], 'course_parser.dat'), mode='rb') as f:
+        course = pickle.load(f)
+    
+    for module in course.get_modules():
+        if module.get_name() == request.form['module']:
+            module.choose()
+
+    md_export.process(course, request.form['var_qty'], request.form['task_qty'])
+    return send_file('test.html', mimetype='text/html')
 
 @app.route('/logout')
 def logout():
