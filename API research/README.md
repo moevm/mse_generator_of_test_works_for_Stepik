@@ -17,6 +17,6 @@
     course = download_course(token, course_id)
     chosen_steps = course.get_chosen()
 ### Структура файлов
-В результате выполнения скрипта **get_steps.py** создается следующая структура файлов:
+В результате выполнения скрипта **download_course** создается следующая структура файлов:
 
 ![Пример структуры данных](https://github.com/moevm/mse_generator_of_test_works_for_Stepik/raw/dev/API%20research/examples/file_structure_example.png?raw=true)
