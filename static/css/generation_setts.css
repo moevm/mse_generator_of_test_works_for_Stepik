@@ -29,3 +29,10 @@
 .plus:hover{
     background-color: #8DC26F !important;
 }
+
+/*Prevent text selection*/
+span{
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
