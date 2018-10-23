@@ -34,6 +34,7 @@
 <body>
     <div class="generation-setts-page">
         <form role="form" class="gen-setts-form" action="{{ url_for('generate') }}" method="POST">
+            <input type="text" name="course_id" value="{{ course_id }}" style="display: none;">
             <div id="get-back-cont">
                 <a id="get-back" href={{ url_for('courses') }}>
                     <i class="material-icons">undo</i>
@@ -42,7 +43,7 @@
             </div>
             <div class="form-group">
                 <div class="course-name">
-                    <label id="course-name-label">Имя курса</label>
+                    <label id="course-name-label">{{ course.get_name() }}</label>
                 </div>
             </div>
             <div class="form-group">
@@ -64,16 +65,18 @@
             <div class="form-group">
                 <div class="input-group mb-3" id="module-selection">
                     <select name="module" title="Выберите модуль ..." class="form-control" id="inputGroupSelect01">
-                        <option>Модуль 1</option>
-                        <option>Модуль 2</option>
-                        <option>Модуль 3</option>
+                        {% for  module in course.get_modules() %}
+                            <option>{{ module.get_name() }}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="input-group mb-3" id="lesson-selection" id="inputGroupSelect02">
                     <select title="Выберите уроки ..." class="form-control">
-                        <option>Урок 1</option>
-                        <option>Урок 2</option>
-                        <option>Урок 3</option>
+                        {% for  module in course.get_modules() %}
+                            {% for lesson in module.get_lessons() %}
+                                <option>{{ lesson.get_name() }}</option>
+                            {% endfor %}
+                        {% endfor %}
                     </select>
                 </div>
             </div>
