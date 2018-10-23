@@ -11,6 +11,9 @@ class Course():
         self.name = name
         self.modules = []  # List of Module objects
         self.path = ''
+    
+    def get_id(self):
+        return self.id
 
     def get_modules(self):
         return self.modules
@@ -180,43 +183,41 @@ def download_course(token, course_id):
             steps = fetch_objects('step', step_ids, token=token)  # Степы
 
             for step in steps:  # Итерация по степам
-                _step = Step(_lesson, step['block']['name'])
-                _lesson.steps.append(_step)
-                step_source = fetch_object('step-source', step['id'], token=token)
-                path = [
-                    '{}'.format(str(course['id']).zfill(2)),
-                    '{}_{}'.format(str(section['position']).zfill(2), str(section['title']).replace(' ','_')),
-                    '{}_{}'.format(str(unit['position']).zfill(2), str(lesson['title']).replace(' ','_')),
-                    '{}_{}_{}.step'.format(lesson['id'], str(step['position']).zfill(2), step['block']['name'])
-                ]
+                if step['block'][name] == ('choice' or 'number' or 'string'):
+                    _step = Step(_lesson, step['block']['name'])
+                    _lesson.steps.append(_step)
+                    step_source = fetch_object('step-source', step['id'], token=token)
+                    path = [
+                        '{}'.format(str(course['id']).zfill(2)),
+                        '{}_{}'.format(str(section['position']).zfill(2), str(section['title']).replace(' ','_')),
+                        '{}_{}'.format(str(unit['position']).zfill(2), str(lesson['title']).replace(' ','_')),
+                        '{}_{}_{}.step'.format(lesson['id'], str(step['position']).zfill(2), step['block']['name'])
+                    ]
 
-                if not _step.get_path():
-                    _step.set_path(os.path.join(os.curdir, *path))
-                if not _lesson.get_path():
-                    _lesson.set_path(os.path.join(os.curdir, *path[:3]))
-                if not _module.get_path():
-                    _module.set_path(os.path.join(os.curdir, *path[:2]))
-                if not _course.get_path():
-                    _course.set_path(os.path.join(os.curdir, path[0]))
+                    if not _step.get_path():
+                        _step.set_path(os.path.join(os.curdir, *path))
+                    if not _lesson.get_path():
+                        _lesson.set_path(os.path.join(os.curdir, *path[:3]))
+                    if not _module.get_path():
+                        _module.set_path(os.path.join(os.curdir, *path[:2]))
+                    if not _course.get_path():
+                        _course.set_path(os.path.join(os.curdir, path[0]))
 
-                try:
-                    os.makedirs(os.path.join(os.curdir, *path[:-1]))
-                except:
-                    pass
-                filename = os.path.join(os.curdir, *path)
-                f = open(filename, 'w')
-                data = {
-                    'block': step_source['block'],
-                    'id': str(step['id']),
-                    'time': datetime.datetime.now().isoformat()
-                }
-                f.write(json.dumps(data))
-                f.close()
+                    try:
+                        os.makedirs(os.path.join(os.curdir, *path[:-1]))
+                    except:
+                        pass
+                    filename = os.path.join(os.curdir, *path)
+                    f = open(filename, 'w')
+                    data = {
+                        'block': step_source['block'],
+                        'id': str(step['id']),
+                        'time': datetime.datetime.now().isoformat()
+                    }
+                    f.write(json.dumps(data))
+                    f.close()
 
     ####### testing #######
-    _course.get_modules()[0].get_lessons()[1].choose()
-    _course.get_modules()[1].get_lessons()[0].choose()
-
     print("Course name: ", _course.get_name())
     print("Course path: ", _course.get_path())
     for module in _course.get_modules():
