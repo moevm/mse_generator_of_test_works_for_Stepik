@@ -12,7 +12,10 @@ app.secret_key = 'A0Zr37w/3rX R~XHH-jmm]LSX/,?RT'
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    if 'token' in session:
+        return redirect(url_for('courses'))
+    else:    
+        return render_template('index.html')
 
 @app.route('/login', methods=['POST'])
 def login():
