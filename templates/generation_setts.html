@@ -35,7 +35,9 @@
     <div class="generation-setts-page">
         <form role="form" class="gen-setts-form" action="{{ url_for('generate') }}" method="POST">
             <div class="top-buttons">
-                <button type="submit" class="btn btn-success"></button>
+                <a href={{ url_for('') }}>
+                    <i class="material-icons" id="get-back">undo</i>
+                </a>
                 <a href={{ url_for('logout') }}>
                     <img id="logout" src="../static/icons/logout_icon.png" width="48px" height="48px">
                 </a>
