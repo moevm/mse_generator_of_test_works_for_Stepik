@@ -30,11 +30,6 @@ input {
     text-align: center;
 }
 
-#logout {
-    margin-left: 95%;
-    cursor: pointer;
-}
-
 #get-back {
     color: #4CAF50;
 }
