@@ -1,3 +1,9 @@
+.generation-setts-page {
+    width: 360px;
+    padding: 8% 0 0;
+    margin: auto;
+}
+
 body {
     background: #76b852; /* fallback for old browsers */
     background: -webkit-linear-gradient(right, #76b852, #8DC26F);
