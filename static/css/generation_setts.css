@@ -20,5 +20,12 @@
     font: 30px/1 Arial,sans-serif;
     text-align: center;
     border-radius: 50%;
+}
 
+.minus:hover{
+    background-color: #8DC26F !important;
+}
+
+.plus:hover{
+    background-color: #8DC26F !important;
 }
