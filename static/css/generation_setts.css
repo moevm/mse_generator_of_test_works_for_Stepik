@@ -34,6 +34,10 @@ input {
     color: #4CAF50;
 }
 
+#get-back-cont {
+    margin-bottom: 20px;
+}
+
 .count1, .count2 {
     color: #000;
     display: inline-block;

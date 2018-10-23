@@ -34,10 +34,12 @@
 <body>
     <div class="generation-setts-page">
         <form role="form" class="gen-setts-form" action="{{ url_for('generate') }}" method="POST">
-            <a id="get-back" href={{ url_for('') }}>
-                <i class="material-icons">undo</i>
-            Предыдущая страница
-            </a>
+            <div id="get-back-cont">
+                <a id="get-back" href={{ url_for('') }}>
+                    <i class="material-icons">undo</i>
+                    Предыдущая страница
+                </a>
+            </div>
             <div class="form-group">
                 <div class="course-name">
                     <label id="course-name-label">Имя курса</label>
