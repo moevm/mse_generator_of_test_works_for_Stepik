@@ -6,30 +6,6 @@
     <link rel="stylesheet" href="../static/css/generation_setts.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script>
-        $(document).ready(function(){
-            $('.count1').prop('disabled', true);
-            $('.count2').prop('disabled', true);
-            function setSlider(count, btn_l, btn_r, start, finish) {
-                $(document).on('click',`.${btn_l}`,function(){
-                    $(`.${count}`).val(parseInt($(`.${count}`).val()) + 1 );
-                    if ($(`.${count}`).val() == finish + 1) {
-                        $(`.${count}`).val(finish);
-                    }
-                });
-                $(document).on('click',`.${btn_r}`,function(){
-                    $(`.${count}`).val(parseInt($(`.${count}`).val()) - 1 );
-                    if ($(`.${count}`).val() == start - 1) {
-                        $(`.${count}`).val(start);
-                    }
-                });
-            }
-            setSlider('count1', 'plus1', 'minus1', 1, 4);
-            setSlider('count2', 'plus2', 'minus2', 1, 20);
-        });
-    </script>
 </head>
 <body>
     <div class="generation-setts-page">
@@ -53,13 +29,13 @@
             <div class="form-group">
                 <label for="variant-num">Количество вариантов:</label><br>
                 <span class="minus minus1 bg-dark">-</span>
-                <input type="number" class="count1" name="var_qty" value="1" id="variant-num">
+                <input type="number" class="count1" name="var_qty" value="1" id="variant-num" readonly>
                 <span class="plus plus1 bg-dark">+</span>
             </div>
             <div class="form-group">
                 <label for="tasks-num">Количество заданий в варианте:</label><br>
                 <span class="minus minus2 bg-dark">-</span>
-                <input type="number" class="count2" name="task_qty" value="1" id="tasks-num">
+                <input type="number" class="count2" name="task_qty" value="1" id="tasks-num" readonly>
                 <span class="plus plus2 bg-dark">+</span>
             </div>
             <div class="form-group">
@@ -70,18 +46,32 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="input-group mb-3" id="lesson-selection" id="inputGroupSelect02">
-                    <select title="Выберите уроки ..." class="form-control">
-                        {% for  module in course.get_modules() %}
-                            {% for lesson in module.get_lessons() %}
-                                <option>{{ lesson.get_name() }}</option>
-                            {% endfor %}
-                        {% endfor %}
-                    </select>
-                </div>
             </div>
             <button type="submit" class="btn btn-success">Сгенерировать</button>
         </form>
     </div>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            function setSlider(count, btn_l, btn_r, start, finish) {
+                $(document).on('click',`.${btn_l}`,function(){
+                    $(`.${count}`).val(parseInt($(`.${count}`).val()) + 1 );
+                    if ($(`.${count}`).val() == finish + 1) {
+                        $(`.${count}`).val(finish);
+                    }
+                });
+                $(document).on('click',`.${btn_r}`,function(){
+                    $(`.${count}`).val(parseInt($(`.${count}`).val()) - 1 );
+                    if ($(`.${count}`).val() == start - 1) {
+                        $(`.${count}`).val(start);
+                    }
+                });
+            }
+            setSlider('count1', 'plus1', 'minus1', 1, 4);
+            setSlider('count2', 'plus2', 'minus2', 1, 20);
+        });
+    </script>
 </body>
 </html>
