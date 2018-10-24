@@ -1,6 +1,7 @@
 import sys
 
 from flask import Flask, render_template, request, send_file, session, redirect, url_for, make_response
+from flask import Flask, render_template, request, send_file, session, redirect, url_for, make_response, flash
 from functools import wraps, update_wrapper
 from datetime import datetime
 import user
@@ -99,6 +100,7 @@ def generate():
             module.choose()
 
     test_name = md_export.process(course, request.form['name'], request.form['var_qty'], request.form['task_qty'])
+    test_names = md_export.process(course, request.form['name'], int(request.form['var_qty']), int(request.form['task_qty']))
 
     # markdown.markdownFromFile(input=test_name, output=test_name.replace('.md', '.html'))
     
@@ -109,6 +111,9 @@ def generate():
     
     # output.close()
     # src.close()
+    flash('Контрольная успешно сгенерировона!', 'info')
+    for var_name in test_names:
+        flash(var_name, 'info')
 
     return send_file(test_name, mimetype='text/markdown')
     #return send_file(test_name.replace('.md', '.html'), mimetype='text/html')
