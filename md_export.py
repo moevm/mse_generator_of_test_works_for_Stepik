@@ -6,9 +6,11 @@ def process(course, test_name, var_qty=1, task_qty=10):
     with open(file_name, mode='w', encoding='utf8') as f:
         f.write('# ' + test_name + '  \n')
         f.write('## Вариант 1  \n')
+        f.write('******\n')
         f.write('**ФИО**___________________________________  \n')
         f.write('**Группа**_____  \n')
         f.write('**Дата**__________  \n')
+        f.write('******\n')
         for num, step in enumerate(course.get_chosen()):
             if step.get_type() == 'number':
                 number(f, step.get_path(), num + 1)
@@ -27,6 +29,8 @@ def choiсe(fp, step, num):
 
     for option in step['block']['source']['options']:
         fp.write('\t' + '- ' + option['text'] + '  \n')
+    
+    fp.write('******\n')
 
 def number(fp, step, num):
     src = open(step, mode='r')
@@ -36,6 +40,7 @@ def number(fp, step, num):
     fp.write(str(num) + '. ' + step['block']['text'] + '  \n')
     fp.write('*(ответом является число)*  \n')
     fp.write('\t' + '- **Ответ:** _____________________  \n')
+    fp.write('******\n')
 
 def string(fp, step, num):
     src = open(step, mode='r')
@@ -45,3 +50,4 @@ def string(fp, step, num):
     fp.write(str(num) + '. ' + step['block']['text'] + '  \n')
     fp.write('*(ответом является строка)*  \n')
     fp.write('\t' + '- **Ответ:** _____________________  \n')
+    fp.write('******\n')
