@@ -3,7 +3,6 @@ import json
 import requests
 import datetime
 import sys
-import re
 
 
 class Course():
@@ -12,7 +11,7 @@ class Course():
         self.name = name
         self.modules = []  # List of Module objects
         self.path = ''
-
+    
     def get_id(self):
         return self.id
 
@@ -37,6 +36,7 @@ class Course():
                         for step in lesson.get_steps():
                             if step.get_status():
                                 chosen_steps.append(step)
+
         return chosen_steps
 
 
@@ -184,7 +184,6 @@ def download_course(token, course_id):
 
             for step in steps:  # Итерация по степам
                 if step['block']['name'] in ('choice', 'number', 'string'):
-                    step['block']['text'] = re.sub('<*>', '', step['block']['text'])
                     _step = Step(_lesson, step['block']['name'])
                     _lesson.steps.append(_step)
                     step_source = fetch_object('step-source', step['id'], token=token)
@@ -219,7 +218,6 @@ def download_course(token, course_id):
                     f.close()
 
     ####### testing #######
-
     print("Course name: ", _course.get_name())
     print("Course path: ", _course.get_path())
     for module in _course.get_modules():
