@@ -165,7 +165,7 @@ def fetch_objects(obj_class, obj_ids, token):
 def cleanhtml(raw_html):
     cleanr = re.compile('<.*?>')
     cleantext = re.sub(cleanr, '', raw_html)
-    return cleantext
+    return cleantext.strip()
 
 def download_course(token, course_id):
     token = token
