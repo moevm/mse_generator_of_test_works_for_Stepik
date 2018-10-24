@@ -90,8 +90,6 @@ def course():
 
 @app.route('/generate', methods=['POST'])
 def generate():
-    #TODO generating
-    # return html with generated test
     with open(os.path.join(request.form['course_id'], 'course_parser.dat'), mode='rb') as f:
         course = pickle.load(f)
     
@@ -99,8 +97,9 @@ def generate():
         if module.get_name() == request.form['module']:
             module.choose()
 
-    md_export.process(course, request.form['var_qty'], request.form['task_qty'])
-    return send_file('test.html', mimetype='text/html')
+    test_name = md_export.process(course, request.form['name'])#, request.form['var_qty'], request.form['task_qty'])
+    # return send_file(test_name, mimetype='text/markdown')
+    return send_file('Контрольная.pdf', mimetype='application/pdf')
 
 @app.route('/logout')
 def logout():
