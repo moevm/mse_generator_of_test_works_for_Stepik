@@ -55,8 +55,6 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function(){
-            $('.count1').prop('disabled', true);
-            $('.count2').prop('disabled', true);
             function setSlider(count, btn_l, btn_r, start, finish) {
                 $(document).on('click',`.${btn_l}`,function(){
                     $(`.${count}`).val(parseInt($(`.${count}`).val()) + 1 );
