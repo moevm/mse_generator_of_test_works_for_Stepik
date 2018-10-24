@@ -162,6 +162,11 @@ def fetch_objects(obj_class, obj_ids, token):
         objs += response['{}s'.format(obj_class)]
     return objs
 
+def cleanhtml(raw_html):
+    cleanr = re.compile('<.*?>')
+    cleantext = re.sub(cleanr, '', raw_html)
+    return cleantext
+
 def download_course(token, course_id):
     token = token
     course = fetch_object('course', course_id, token=token)
@@ -184,7 +189,8 @@ def download_course(token, course_id):
 
             for step in steps:  # Итерация по степам
                 if step['block']['name'] in ('choice', 'number', 'string'):
-                    step['block']['text'] = re.sub('<*>', '', step['block']['text'])
+                    raw_html = step['block']['text']
+                    step['block']['text'] = cleanhtml(raw_html)
                     _step = Step(_lesson, step['block']['name'])
                     _lesson.steps.append(_step)
                     step_source = fetch_object('step-source', step['id'], token=token)
