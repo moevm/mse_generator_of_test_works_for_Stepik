@@ -223,27 +223,4 @@ def download_course(token, course_id):
                     }
                     f.write(json.dumps(data))
                     f.close()
-
-    ####### testing #######
-
-    print("Course name: ", _course.get_name())
-    print("Course path: ", _course.get_path())
-    for module in _course.get_modules():
-        print('**************************MODULE*************************************')
-        print("--name: ", module.get_name())
-        print("--path: ", module.get_path())
-        print("--status: ", module.get_status())
-        for lesson in module.lessons:
-            print('*************************LESSON***********************')
-            print("----name: ", lesson.get_name())
-            print("----path: ", lesson.get_path())
-            print("----status: ", lesson.get_status())
-            for step in lesson.steps:
-                print('*******************STEP*****************************************')
-                print("------type: ", step.get_type())
-                print("------path: ", step.get_path())
-                print("------status: ", step.get_status())
-                print('*************************************************************************')
-    ########################
-
     return _course
