@@ -9,6 +9,7 @@ import md_export
 import os
 import markdown
 import pickle
+from xhtml2pdf import pisa
 
 def nocache(view):
     @wraps(view)
@@ -97,9 +98,21 @@ def generate():
         if module.get_name() == request.form['module']:
             module.choose()
 
-    test_name = md_export.process(course, request.form['name'])#, request.form['var_qty'], request.form['task_qty'])
-    # return send_file(test_name, mimetype='text/markdown')
-    return send_file('Контрольная.pdf', mimetype='application/pdf')
+    test_name = md_export.process(course, request.form['name'], request.form['var_qty'], request.form['task_qty'])
+
+    # markdown.markdownFromFile(input=test_name, output=test_name.replace('.md', '.html'))
+    
+    # output = open(test_name.replace('.md', '.pdf'), mode='w+b')
+    # src = open(test_name.replace('.md', '.html'), mode='r', encoding='utf8')
+    
+    # pisa.CreatePDF(src.read(), dest=output)
+    
+    # output.close()
+    # src.close()
+
+    return send_file(test_name, mimetype='text/markdown')
+    #return send_file(test_name.replace('.md', '.html'), mimetype='text/html')
+    #return send_file('Контрольная.pdf', mimetype='application/pdf')
 
 @app.route('/logout')
 def logout():
