@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Настройки генерации</title>
+    <link rel="stylesheet" href="../static/css/generation_setts.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <div class="generation-setts-page">
+        <form role="form" class="gen-setts-form" action="{{ url_for('generate') }}" method="POST">
+            <input type="text" name="course_id" value="{{ course_id }}" style="display: none;">
+            <div id="get-back-cont">
+                <a id="get-back" href={{ url_for('courses') }}>
+                    <i class="material-icons">undo</i>
+                    Назад к выбору курса
+                </a>
+            </div>
+            <div class="form-group">
+                <div class="course-name">
+                    <label id="course-name-label">{{ course.get_name() }}</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="testname">Название контрольной:</label>
+                <input type="text" name="name" class="form-control" id="testname" placeholder="Введите название контрольной">
+            </div>
+            <div class="form-group">
+                <label for="variant-num">Количество вариантов:</label><br>
+                <span class="minus minus1 bg-dark">-</span>
+                <input type="number" class="count1" name="var_qty" value="1" id="variant-num" readonly>
+                <span class="plus plus1 bg-dark">+</span>
+            </div>
+            <div class="form-group">
+                <label for="tasks-num">Количество заданий в варианте:</label><br>
+                <span class="minus minus2 bg-dark">-</span>
+                <input type="number" class="count2" name="task_qty" value="1" id="tasks-num" readonly>
+                <span class="plus plus2 bg-dark">+</span>
+            </div>
+            <div class="form-group">
+                <div class="input-group mb-3" id="module-selection">
+                    <select name="module" title="Выберите модуль ..." class="form-control" id="inputGroupSelect01">
+                        {% for  module in course.get_modules() %}
+                            <option>{{ module.get_name() }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success">Сгенерировать</button>
+        </form>
+    </div>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            function setSlider(count, btn_l, btn_r, start, finish) {
+                $(document).on('click',`.${btn_l}`,function(){
+                    $(`.${count}`).val(parseInt($(`.${count}`).val()) + 1 );
+                    if ($(`.${count}`).val() == finish + 1) {
+                        $(`.${count}`).val(finish);
+                    }
+                });
+                $(document).on('click',`.${btn_r}`,function(){
+                    $(`.${count}`).val(parseInt($(`.${count}`).val()) - 1 );
+                    if ($(`.${count}`).val() == start - 1) {
+                        $(`.${count}`).val(start);
+                    }
+                });
+            }
+            setSlider('count1', 'plus1', 'minus1', 1, 4);
+            setSlider('count2', 'plus2', 'minus2', 1, 20);
+        });
+    </script>
+</body>
+</html>
