@@ -189,8 +189,6 @@ def download_course(token, course_id):
 
             for step in steps:  # Итерация по степам
                 if step['block']['name'] in ('choice', 'number', 'string'):
-                    raw_html = step['block']['text']
-                    step['block']['text'] = cleanhtml(raw_html)
                     _step = Step(_lesson, step['block']['name'])
                     _lesson.steps.append(_step)
                     step_source = fetch_object('step-source', step['id'], token=token)
@@ -217,17 +215,11 @@ def download_course(token, course_id):
                     filename = os.path.join(os.curdir, *path)
                     f = open(filename, 'w')
                     data = {
-                        'block': {
-                            'name': step['block']['name'],
-                            'text': cleanhtml(step['block']['text']),
-                            'video': step['block']['video'],
-                            'animation': step['block']['animation'],
-                            'options': step['block']['options'],
-                            'subtitle_files': step['block']['subtitle_files'],
-                        },
+                        'block': step_source['block'],
                         'id': str(step['id']),
                         'time': datetime.datetime.now().isoformat()
                     }
+                    data['block']['text'] = cleanhtml(step['block']['text'])
                     f.write(json.dumps(data))
                     f.close()
 
