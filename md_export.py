@@ -28,7 +28,7 @@ def choiсe(fp, step, num):
     fp.write(str(num) + '. ' + step['block']['text'] + '  \n')
 
     for option in step['block']['source']['options']:
-        fp.write('\t' + '- ' + option['text'] + '  \n')
+        fp.write('    ' + '- ' + option['text'] + '  \n')
     
     fp.write('******\n')
 
@@ -39,7 +39,7 @@ def number(fp, step, num):
 
     fp.write(str(num) + '. ' + step['block']['text'] + '  \n')
     fp.write('*(ответом является число)*  \n')
-    fp.write('\t' + '- **Ответ:** _____________________  \n')
+    fp.write('    ' + '- **Ответ:** _____________________  \n')
     fp.write('******\n')
 
 def string(fp, step, num):
@@ -49,5 +49,5 @@ def string(fp, step, num):
     
     fp.write(str(num) + '. ' + step['block']['text'] + '  \n')
     fp.write('*(ответом является строка)*  \n')
-    fp.write('\t' + '- **Ответ:** _____________________  \n')
+    fp.write('    ' + '- **Ответ:** _____________________  \n')
     fp.write('******\n')
