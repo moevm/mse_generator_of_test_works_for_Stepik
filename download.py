@@ -217,10 +217,18 @@ def download_course(token, course_id):
                     filename = os.path.join(os.curdir, *path)
                     f = open(filename, 'w')
                     data = {
-                        'block': step_source['block'],
+                        'block': {
+                            'name': step['block']['name'],
+                            'text': cleanhtml(step['block']['text']),
+                            'video': step['block']['video'],
+                            'animation': step['block']['animation'],
+                            'options': step['block']['options'],
+                            'subtitle_files': step['block']['subtitle_files'],
+                        },
                         'id': str(step['id']),
                         'time': datetime.datetime.now().isoformat()
                     }
                     f.write(json.dumps(data))
                     f.close()
+
     return _course
