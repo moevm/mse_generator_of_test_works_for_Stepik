@@ -46,15 +46,6 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="input-group mb-3" id="lesson-selection" id="inputGroupSelect02">
-                    <select title="Выберите уроки ..." class="form-control">
-                        {% for  module in course.get_modules() %}
-                            {% for lesson in module.get_lessons() %}
-                                <option>{{ lesson.get_name() }}</option>
-                            {% endfor %}
-                        {% endfor %}
-                    </select>
-                </div>
             </div>
             <button type="submit" class="btn btn-success">Сгенерировать</button>
         </form>
