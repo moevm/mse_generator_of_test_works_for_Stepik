@@ -9,13 +9,11 @@ def process(course, test_name, var_qty=1, task_qty=5):
         file_names.append(file_name)
         
         with open(file_name, mode='w', encoding='utf8') as f:
-            f.write('# ' + test_name + '  \n')
-            f.write('## Вариант {}  \n'.format(var_num + 1))
-            f.write('******\n')
-            f.write('**ФИО**___________________________________  \n')
-            f.write('**Группа**_____  \n')
-            f.write('**Дата**__________  \n')
-            f.write('******\n')
+            f.write('# ' + test_name + '  \n\n')
+            f.write('## Вариант {}  \n\n'.format(var_num + 1))
+            f.write('******\n\n')
+            f.write('<table class="w3-table-all w3-large w3-centered"><tr><th>Фио</th><th>Группа</th><th>Дата</th></tr><tr><td style="opacity: 0.05;">*************************</td><td style="opacity: 0.05;">****</td><td style="opacity: 0.05;">**********</td></tr></table>\n\n')
+            f.write('******\n\n')
 
             var = course.get_chosen()
             var = [var[i] for i in random.sample(range(len(var)), task_qty)]
