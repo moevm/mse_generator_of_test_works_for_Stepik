@@ -1,5 +1,4 @@
 import sys
-
 from flask import Flask, render_template, request, send_file, session, redirect, url_for, make_response, flash
 from functools import wraps, update_wrapper
 from datetime import datetime
@@ -7,9 +6,7 @@ import user
 import download
 import md_export
 import os
-import markdown
 import pickle
-from xhtml2pdf import pisa
 
 def nocache(view):
     @wraps(view)
