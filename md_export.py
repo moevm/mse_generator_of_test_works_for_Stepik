@@ -19,11 +19,12 @@ def process(course, test_name, var_qty=1, task_qty=5):
             var = [var[i] for i in random.sample(range(len(var)), task_qty)]
 
             for num, step in enumerate(var):
+                print(step.get_type())
                 if step.get_type() == 'number':
                     number(f, step.get_path(), num + 1)
                 elif step.get_type() == 'choice':
                     choiсe(f, step.get_path(), num + 1)
-                elif step.get_type == 'string':
+                else:
                     string(f, step.get_path(), num + 1)    
 
     return file_names
@@ -44,8 +45,7 @@ def number(fp, step, num):
     step = json.load(src)
     src.close()
 
-    fp.write(str(num) + '. ' + step['block']['text'] + '  \n')
-    fp.write('*(ответом является число)*  \n')
+    fp.write(str(num) + '. ' + step['block']['text'] + '*(ответом является число)*  \n')
     fp.write('    ' + '**Ответ:**  \n')
 
     fp.write('\n')
@@ -55,8 +55,7 @@ def string(fp, step, num):
     step = json.load(src)
     src.close()
     
-    fp.write(str(num) + '. ' + step['block']['text'] + '  \n')
-    fp.write('*(ответом является строка)*  \n')
+    fp.write(str(num) + '. ' + step['block']['text'] + '*(ответом является строка)*  \n')
     fp.write('    ' + '**Ответ:**  \n')
 
     fp.write('\n')
