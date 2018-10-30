@@ -1,0 +1,4 @@
+requests
+Flask
+xhtml2pdf
+markdown

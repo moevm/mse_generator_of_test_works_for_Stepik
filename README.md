@@ -42,13 +42,15 @@
 
 - requests
 - Flask
+- xhtml2pdf
+- markdown
 
 ## Запуск
 
 В папке проекта выполнить:
 
 ```
-    pip install flask requests
+    pip install -r requirements.txt
     python app.py
     
 ```

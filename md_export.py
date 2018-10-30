@@ -1,3 +1,5 @@
+# -*- encoding: utf-8 -*-
+
 import json
 import download
 
@@ -15,13 +17,13 @@ def process(course, test_name, var_qty=1, task_qty=10):
             if step.get_type() == 'number':
                 number(f, step.get_path(), num + 1)
             elif step.get_type() == 'choice':
-                choiсe(f, step.get_path(), num + 1)
+                choice(f, step.get_path(), num + 1)
             elif step.get_type == 'string':
                 string(f, step.get_path(), num + 1)    
 
     return file_name
 
-def choiсe(fp, step, num):
+def choice(fp, step, num):
     src = open(step, mode='r')
     step = json.load(src)
     src.close()

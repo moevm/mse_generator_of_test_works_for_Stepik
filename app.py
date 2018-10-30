@@ -1,3 +1,5 @@
+# -*- encoding: utf-8 -*-
+
 import sys
 
 from flask import Flask, render_template, request, send_file, session, redirect, url_for, make_response
