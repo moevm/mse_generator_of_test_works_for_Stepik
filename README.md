@@ -38,6 +38,13 @@
 
 ![Пример структуры данных](https://github.com/moevm/mse_generator_of_test_works_for_Stepik/raw/dev/API%20research/examples/file_structure_example.png?raw=true)
 
+## Создание приложения на Stepic  
+* Перейти по ссылке https://stepik.org/login?next=/oauth2/applications/ и авторизоваться в системе Stepic
+* Нажать "Новое приложение", либо перейти по https://stepik.org/oauth2/applications/register/
+* Name и Client type можно оставить любыми, Authorization grant type - Client Credentials - Сохранить  
+* Выбрать созданное приложение в списке и скопировать Client id и Client secret
+
+
 ## Зависимости
 
 - requests
@@ -51,7 +58,7 @@
 
 ```
     pip install -r requirements.txt
-    python app.py
+    python3 app.py
     
 ```
 
