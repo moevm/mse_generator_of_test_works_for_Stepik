@@ -95,3 +95,7 @@ input:disabled{
     font-size: 18px;
     text-align: center;
 }
+
+label {
+    word-wrap: break-word;
+}
