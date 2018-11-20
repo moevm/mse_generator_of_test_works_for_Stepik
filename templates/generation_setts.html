@@ -11,7 +11,7 @@
 <body>
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% for category, message in messages %}
-            <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+            <div class="alert alert-{{ category }} alert-dismissible" role="alert" id="flash-msg">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -40,7 +40,7 @@
             <div class="form-group">
                 <label for="module-selection">Необходимые модули</label>
                 <div class="input-group mb-3" id="module-selection">
-                    <select id="multimodules" multiple="multiple">
+                    <select name="module" id="multimodules" multiple="multiple">
                         {% for  module in course.get_modules() %}
                             <option>{{ module.get_name() }}</option>
                         {% endfor %}

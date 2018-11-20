@@ -100,3 +100,22 @@ input:disabled{
 .input-group {
     margin: auto;
 }
+
+#flash-msg {
+    text-align: center;
+    line-height: 2.5;
+    overflow: hidden;
+    -webkit-box-shadow: 0 0 5px black;
+    -moz-box-shadow:    0 0 5px black;
+    box-shadow:         0 0 5px black;
+    display: block;
+    animation: fadeOut 5s linear forwards;
+}
+
+ @keyframes fadeOut {
+ 0%  { opacity: 0; }
+ 10% { opacity: 1; }
+ 90% { opacity: 1; transform: translateY(0px);}
+ 99% { opacity: 0; transform: translateY(-30px);}
+ 100% { opacity: 0; }
+}
