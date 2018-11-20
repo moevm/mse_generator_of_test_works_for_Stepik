@@ -2,11 +2,16 @@ import json
 import download
 import random
 import os
+import shutil
 
 def process(course, test_name, var_qty=1, task_qty=5):
     file_names = []
     if not (os.path.exists('./md_works')):
         os.makedirs(os.path.join(os.curdir, './md_works'))
+    else:
+        shutil.rmtree('./md_works')
+        os.makedirs(os.path.join(os.curdir, './md_works'))
+
     for var_num in range(var_qty):
         file_name = os.path.join('./md_works', test_name.replace(' ', '_') + '_var_{}'.format(var_num + 1) + '.md')
         file_names.append(file_name)
