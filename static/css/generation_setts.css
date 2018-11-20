@@ -73,7 +73,7 @@ span{
     -ms-user-select: none;
 }
 
-input{
+input, select{
     border: 0;
     width: 2%;
     display: block;
@@ -94,8 +94,5 @@ input:disabled{
     font-weight: bold;
     font-size: 18px;
     text-align: center;
-}
-
-label {
     word-wrap: break-word;
 }
