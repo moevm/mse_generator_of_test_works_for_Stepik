@@ -96,3 +96,7 @@ input:disabled{
     text-align: center;
     word-wrap: break-word;
 }
+
+.input-group {
+    margin: auto;
+}
