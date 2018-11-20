@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Настройки генерации</title>
-    <link rel="stylesheet" href="../static/css/generation_setts.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
     <link rel="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" type="text/css"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/generation_setts.css">
 </head>
 <body>
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -38,7 +38,7 @@
                 <input type="text" name="name" class="form-control" id="testname" placeholder="Введите название контрольной">
             </div>
             <div class="form-group">
-                <label for="testname">Необходимые модули</label>
+                <label for="module-selection">Необходимые модули</label>
                 <div class="input-group mb-3" id="module-selection">
                     <select id="multimodules" multiple="multiple">
                         {% for  module in course.get_modules() %}
@@ -55,9 +55,9 @@
             </div>
             <div class="form-group">
                 <label for="tasks-num">Количество заданий в варианте:</label><br>
-                <span class="minus minus2 bg-dark">-</span>
+                <span class="minus minus2">-</span>
                 <input type="number" class="count2" name="task_qty" value="1" id="tasks-num" readonly>
-                <span class="plus plus2 bg-dark">+</span>
+                <span class="plus plus2">+</span>
             </div>
             <button type="submit" class="btn btn-success">Сгенерировать</button>
         </form>

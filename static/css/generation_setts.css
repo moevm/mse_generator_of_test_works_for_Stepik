@@ -46,6 +46,7 @@ body {
 }
 
 .plus, .minus{
+    background-color: black;
     cursor: pointer;
     display: inline-block;
     vertical-align: top;
