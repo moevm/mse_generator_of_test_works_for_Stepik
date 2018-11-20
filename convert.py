@@ -13,6 +13,4 @@ def convertation(md_path):
     md_list = os.listdir(md_path)
     for md_file in md_list:
         md2pdf(os.path.join(pdf_path, md_file[:-3] + '.pdf'), md_file_path=os.path.join(md_path, md_file),
-        css_file_path=os.path.join(os.curdir, css_path))
-
-convertation(md_path)   
+        css_file_path=os.path.join(os.curdir, css_path))   
