@@ -22,7 +22,7 @@
         </div>
     {% endwith %}
     <div class="generation-setts-page" hidden>
-        <form role="form" class="gen-setts-form">
+        <form role="form" class="gen-setts-form" action="{{ url_for('generate') }}" method="POST" id="main-form">
             <input type="text" name="course_id" value="{{ course_id }}" style="display: none;" id="course-id">
             <div id="get-back-cont">
                 <a id="get-back" href={{ url_for('courses') }}>
@@ -85,26 +85,27 @@
                     }
                 });
             }
+
             $('#multimodules').multiselect();
+
             setSlider('count1', 'plus1', 'minus1', 1, 4);
             setSlider('count2', 'plus2', 'minus2', 1, 20);
+            $('#submit-btn').prop('disabled', true);
+
             $('.generation-setts-page').show();
-            $('#submit-btn').on('click', function () {
-                let genSetts = {
-                    courseID: $('#course-id').val(),
-                    name: $('#testname').val(),
-                    modules: $('#multimodules').val(),
-                    varNum: $('#variant-num').val(),
-                    taskNum: $('#tasks-num').val()
-                };
-                $.ajax({
-                    type: 'POST',
-                    contentType: 'application/json',
-                    url: '/generate',
-                    dataType : 'json',
-                    data : JSON.stringify(genSetts)
-                });
-            })
+
+
+            function checkInputs() {
+                if ($('#multimodules').val().length === 0 || $('#testname').val() === '') {
+                    $('#submit-btn').prop('disabled', true);
+                } else {
+                    $('#submit-btn').prop('disabled', false);
+                }
+            }
+
+            $('#testname').on('input keyup', checkInputs);
+            $('#multimodules').change(checkInputs);
+
         });
     </script>
 </body>

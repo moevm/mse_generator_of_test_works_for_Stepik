@@ -98,23 +98,20 @@ def course():
 
 @app.route('/generate', methods=['POST'])
 def generate():
-    data = request.get_json()
-
-    with open(os.path.join(data['courseID'], 'course_parser.dat'), mode='rb') as f:
+    with open(os.path.join(request.form['course_id'], 'course_parser.dat'), mode='rb') as f:
         course = pickle.load(f)
 
     for module in course.get_modules():
-        for taken_module in data['modules']:
-            if module.get_name() == taken_module:
-                module.choose()
+        if module.get_name() == request.form['module']:
+            module.choose()
 
-    test_names = md_export.process(course, data['name'], int(data['varNum']), int(data['taskNum']))
+    test_names = md_export.process(course, request.form['name'], int(request.form['var_qty']), int(request.form['task_qty']))
 
     flash('Контрольная успешно сгенерировона!', 'info')
     for var_name in test_names:
         flash(var_name, 'info')
 
-    return redirect(url_for('course', id=data['courseID']))
+    return redirect(url_for('course', id=request.form['course_id']))
 
 
 @app.route('/logout')
