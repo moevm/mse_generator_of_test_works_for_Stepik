@@ -20,8 +20,10 @@ def nocache(view):
         
     return update_wrapper(no_cache, view)
 
+
 app = Flask(__name__)
 app.secret_key = 'A0Zr37w/3rX R~XHH-jmm]LSX/,?RT'
+
 
 @app.route('/')
 @nocache
@@ -30,6 +32,7 @@ def index():
         return redirect(url_for('courses'))
     else:    
         return render_template('index.html')
+
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -40,6 +43,7 @@ def login():
     else:
         session['token'] = token
         return redirect(url_for('courses'))
+
 
 @app.route('/courses')
 @nocache
@@ -66,6 +70,7 @@ def courses():
     else:
         return redirect(url_for('index'))
 
+
 @app.route('/course')
 @nocache
 def course():
@@ -86,16 +91,20 @@ def course():
     else:
         return redirect(url_for('index'))
 
+
 @app.route('/generate', methods=['POST'])
 def generate():
     with open(os.path.join(request.form['course_id'], 'course_parser.dat'), mode='rb') as f:
         course = pickle.load(f)
-    
+
+    selected_modules = request.form.getlist('module')
+
     for module in course.get_modules():
-        if module.get_name() == request.form['module']:
+        if module.get_name() in selected_modules:
             module.choose()
 
-    test_names = md_export.process(course, request.form['name'], int(request.form['var_qty']), int(request.form['task_qty']))
+    test_names = md_export.process(course, request.form['name'], 
+    int(request.form['var_qty']), int(request.form['task_qty']))
 
     flash('Контрольная успешно сгенерировона!', 'info')
     for var_name in test_names:
@@ -103,10 +112,12 @@ def generate():
 
     return redirect(url_for('course', id=request.form['course_id']))
 
+
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('index'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
