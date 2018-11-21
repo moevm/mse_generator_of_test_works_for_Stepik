@@ -99,7 +99,6 @@ def course():
 @app.route('/generate', methods=['POST'])
 def generate():
     data = request.get_json()
-    print(data)
 
     with open(os.path.join(data['courseID'], 'course_parser.dat'), mode='rb') as f:
         course = pickle.load(f)
