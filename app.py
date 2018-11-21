@@ -1,5 +1,4 @@
 import sys
-
 from flask import Flask, render_template, request, send_file, session, redirect, url_for, make_response, flash
 from functools import wraps, update_wrapper
 from datetime import datetime
@@ -7,10 +6,7 @@ import user
 import download
 import md_export
 import os
-import markdown
 import pickle
-from xhtml2pdf import pisa
-
 
 def nocache(view):
     @wraps(view)
@@ -101,13 +97,14 @@ def generate():
     with open(os.path.join(request.form['course_id'], 'course_parser.dat'), mode='rb') as f:
         course = pickle.load(f)
 
-    print(request.form)
+    selected_modules = request.form.getlist('module')
 
     for module in course.get_modules():
-        if module.get_name() == request.form['module']:
+        if module.get_name() in selected_modules:
             module.choose()
 
-    test_names = md_export.process(course, request.form['name'], int(request.form['var_qty']), int(request.form['task_qty']))
+    test_names = md_export.process(course, request.form['name'], 
+    int(request.form['var_qty']), int(request.form['task_qty']))
 
     flash('Контрольная успешно сгенерировона!', 'info')
     for var_name in test_names:
