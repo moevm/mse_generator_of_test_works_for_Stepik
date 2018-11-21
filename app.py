@@ -101,6 +101,8 @@ def generate():
     with open(os.path.join(request.form['course_id'], 'course_parser.dat'), mode='rb') as f:
         course = pickle.load(f)
 
+    print(request.form)
+
     for module in course.get_modules():
         if module.get_name() == request.form['module']:
             module.choose()
