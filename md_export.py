@@ -3,17 +3,19 @@ import download
 import random
 import os
 import shutil
+from md2pdf.core import md2pdf
 
 def process(course, test_name, var_qty=1, task_qty=5):
     file_names = []
-    if not (os.path.exists('./md_works')):
-        os.makedirs(os.path.join(os.curdir, './md_works'))
+    md_path = os.path.join(os.curdir, './md_works')
+    if not (os.path.exists(md_path)):
+        os.makedirs(md_path)
     else:
-        shutil.rmtree('./md_works')
-        os.makedirs(os.path.join(os.curdir, './md_works'))
+        shutil.rmtree(md_path)
+        os.makedirs(md_path)
 
     for var_num in range(var_qty):
-        file_name = os.path.join('./md_works', test_name.replace(' ', '_') + '_var_{}'.format(var_num + 1) + '.md')
+        file_name = os.path.join(md_path, test_name.replace(' ', '_') + '_var_{}'.format(var_num + 1) + '.md')
         file_names.append(file_name)
         
         with open(file_name, mode='w', encoding='utf8') as f:
@@ -35,9 +37,22 @@ def process(course, test_name, var_qty=1, task_qty=5):
                 elif step.get_type() == 'choice':
                     choiсe(f, step.get_path(), num + 1)
                 else:
-                    string(f, step.get_path(), num + 1)    
+                    string(f, step.get_path(), num + 1)
 
-    return file_names
+    pdf_files = []
+    pdf_path = os.path.join(os.curdir, 'test_works') # папка для pdf
+    if not (os.path.exists(pdf_path)):
+        os.makedirs(pdf_path)
+    else:
+        shutil.rmtree(pdf_path)
+        os.makedirs(os.path.join(pdf_path))
+    md_list = os.listdir(md_path)
+    for md_file in md_list:
+        md2pdf(os.path.join(pdf_path, md_file[:-3] + '.pdf'), md_file_path=os.path.join(md_path, md_file),
+        css_file_path=os.path.join(os.curdir, './static/css/work.css'))
+        pdf_files.append(os.path.join(pdf_path, md_file[:-3] + '.pdf'))                
+    print(pdf_files)
+    return pdf_files
 
 def choiсe(fp, step, num):
     src = open(step, mode='r')
