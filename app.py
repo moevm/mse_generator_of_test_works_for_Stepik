@@ -4,7 +4,7 @@ from functools import wraps, update_wrapper
 from datetime import datetime
 import user
 import download
-import md_export
+import convert
 import os
 import pickle
 
@@ -103,7 +103,7 @@ def generate():
         if module.get_name() in selected_modules:
             module.choose()
 
-    test_names = md_export.process(course, request.form['name'], 
+    test_names = convert.process(course, request.form['name'], 
     int(request.form['var_qty']), int(request.form['task_qty']))
 
     flash('Контрольная успешно сгенерировона!', 'info')
