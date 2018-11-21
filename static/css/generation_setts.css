@@ -102,6 +102,8 @@ input:disabled{
 }
 
 #flash-msg {
+    color: #4CAF50;
+    background-color: white;
     text-align: center;
     line-height: 2.5;
     overflow: hidden;
