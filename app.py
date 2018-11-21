@@ -108,7 +108,7 @@ def generate():
 
     flash('Контрольная успешно сгенерировона!', 'info')
     for var_name in test_names:
-        flash(var_name, 'info')
+        flash(var_name.split('/')[2], 'info')
 
     return redirect(url_for('course', id=request.form['course_id']))
 
