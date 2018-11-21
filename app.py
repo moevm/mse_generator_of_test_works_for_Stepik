@@ -4,9 +4,9 @@ from functools import wraps, update_wrapper
 from datetime import datetime
 import user
 import download
-import convert
 import os
 import pickle
+import convert
 
 def nocache(view):
     @wraps(view)
@@ -20,10 +20,8 @@ def nocache(view):
         
     return update_wrapper(no_cache, view)
 
-
 app = Flask(__name__)
 app.secret_key = 'A0Zr37w/3rX R~XHH-jmm]LSX/,?RT'
-
 
 @app.route('/')
 @nocache
@@ -32,7 +30,6 @@ def index():
         return redirect(url_for('courses'))
     else:    
         return render_template('index.html')
-
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -43,7 +40,6 @@ def login():
     else:
         session['token'] = token
         return redirect(url_for('courses'))
-
 
 @app.route('/courses')
 @nocache
@@ -70,27 +66,22 @@ def courses():
     else:
         return redirect(url_for('index'))
 
-
 @app.route('/course')
 @nocache
 def course():
     if 'token' in session:
         course_id = request.args.get('id', default=None, type=int)
+        
         if not course_id:
             return redirect(url_for('courses'))
         else:
-            if not os.path.exists(str(course_id)) or not os.path.isdir(str(course_id)):
-                course = download.download_course(session['token'], course_id)
-                with open(os.path.join(str(course_id), 'course_parser.dat'), mode='wb') as f:
-                    pickle.dump(course, f)
-            else:
-                with open(os.path.join(str(course_id), 'course_parser.dat'), mode='rb') as f:
-                    course = pickle.load(f)
-
+            course = download.download_course(session['token'], course_id)
+            with open(os.path.join(str(course_id), 'course_parser.dat'), mode='wb') as f:
+                pickle.dump(course, f)
+            
             return render_template('generation_setts.html', course=course, course_id=course_id)
     else:
         return redirect(url_for('index'))
-
 
 @app.route('/generate', methods=['POST'])
 def generate():
@@ -112,12 +103,10 @@ def generate():
 
     return redirect(url_for('course', id=request.form['course_id']))
 
-
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('index'))
-
 
 if __name__ == '__main__':
     app.run(debug=True)
