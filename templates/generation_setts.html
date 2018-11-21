@@ -22,8 +22,8 @@
         </div>
     {% endwith %}
     <div class="generation-setts-page" hidden>
-        <form role="form" class="gen-setts-form" action="{{ url_for('generate') }}" method="POST">
-            <input type="text" name="course_id" value="{{ course_id }}" style="display: none;">
+        <form role="form" class="gen-setts-form">
+            <input type="text" name="course_id" value="{{ course_id }}" style="display: none;" id="course-id">
             <div id="get-back-cont">
                 <a id="get-back" href={{ url_for('courses') }}>
                     <i class="material-icons">undo</i>
@@ -61,7 +61,7 @@
                 <input type="number" class="count2" name="task_qty" value="1" id="tasks-num" readonly>
                 <span class="plus plus2">+</span>
             </div>
-            <button type="submit" class="btn btn-success">Сгенерировать</button>
+            <button type="submit" class="btn btn-success" id="submit-btn">Сгенерировать</button>
         </form>
     </div>
 
@@ -89,6 +89,23 @@
             setSlider('count1', 'plus1', 'minus1', 1, 4);
             setSlider('count2', 'plus2', 'minus2', 1, 20);
             $('.generation-setts-page').show();
+            $('#submit-btn').on('click', function () {
+                let genSetts = {
+                    courseID: $('#course-id').val(),
+                    name: $('#testname').val(),
+                    modules: $('#multimodules').val(),
+                    varNum: $('#variant-num').val(),
+                    taskNum: $('#tasks-num').val()
+                };
+                console.log(genSetts);
+                $.ajax({
+                    type: 'POST',
+                    contentType: 'application/json',
+                    url: '/generate',
+                    dataType : 'json',
+                    data : JSON.stringify(genSetts)
+                });
+            })
         });
     </script>
 </body>

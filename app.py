@@ -11,6 +11,7 @@ import markdown
 import pickle
 from xhtml2pdf import pisa
 
+
 def nocache(view):
     @wraps(view)
     def no_cache(*args, **kwargs):
@@ -23,8 +24,10 @@ def nocache(view):
         
     return update_wrapper(no_cache, view)
 
+
 app = Flask(__name__)
 app.secret_key = 'A0Zr37w/3rX R~XHH-jmm]LSX/,?RT'
+
 
 @app.route('/')
 @nocache
@@ -33,6 +36,7 @@ def index():
         return redirect(url_for('courses'))
     else:    
         return render_template('index.html')
+
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -43,6 +47,7 @@ def login():
     else:
         session['token'] = token
         return redirect(url_for('courses'))
+
 
 @app.route('/courses')
 @nocache
@@ -69,6 +74,7 @@ def courses():
     else:
         return redirect(url_for('index'))
 
+
 @app.route('/course')
 @nocache
 def course():
@@ -89,29 +95,34 @@ def course():
     else:
         return redirect(url_for('index'))
 
+
 @app.route('/generate', methods=['POST'])
 def generate():
-    with open(os.path.join(request.form['course_id'], 'course_parser.dat'), mode='rb') as f:
+    data = request.get_json()
+    print(data)
+
+    with open(os.path.join(data['courseID'], 'course_parser.dat'), mode='rb') as f:
         course = pickle.load(f)
 
-    print(request.form)
-
     for module in course.get_modules():
-        if module.get_name() == request.form['module']:
-            module.choose()
+        for taken_module in data['modules']:
+            if module.get_name() == taken_module:
+                module.choose()
 
-    test_names = md_export.process(course, request.form['name'], int(request.form['var_qty']), int(request.form['task_qty']))
+    test_names = md_export.process(course, data['name'], int(data['varNum']), int(data['taskNum']))
 
     flash('Контрольная успешно сгенерировона!', 'info')
     for var_name in test_names:
         flash(var_name, 'info')
 
-    return redirect(url_for('course', id=request.form['course_id']))
+    return redirect(url_for('course', id=data['courseID']))
+
 
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('index'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
