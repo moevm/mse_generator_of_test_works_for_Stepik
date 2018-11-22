@@ -57,7 +57,7 @@
 В папке проекта выполнить:
 
 ```
-    pip install -r requirements.txt
+    pip3 install -r requirements.txt
     python3 app.py
     
 ```
