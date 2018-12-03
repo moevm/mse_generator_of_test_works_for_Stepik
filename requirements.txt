@@ -1,4 +1,4 @@
-requests
-Flask
-xhtml2pdf
-markdown
+requests==2.20.1
+Flask==1.0.2
+xhtml2pdf==0.2.3
+markdown==3.0.1
