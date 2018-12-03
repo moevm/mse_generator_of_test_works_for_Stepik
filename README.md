@@ -62,7 +62,7 @@
     
 ```
 
-Сервис доступен на localhost:8080
+Сервис доступен на http://127.0.0.1:5000/ 
 
 Презентация первой итерации:  
 https://docs.google.com/presentation/d/1GXo8m8JXA-OC7c6_FMFOYaBImJtRXP8ZilnPeo2YIcY/edit?usp=sharing
