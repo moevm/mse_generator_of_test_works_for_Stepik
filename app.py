@@ -1,4 +1,6 @@
 import sys
+sys.path.append('./src')
+
 from flask import Flask, render_template, request, send_file, session, redirect, url_for, make_response, flash
 from functools import wraps, update_wrapper
 from datetime import datetime
