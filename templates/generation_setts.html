@@ -3,14 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>Настройки генерации</title>
-    <link rel="stylesheet" href="../static/css/generation_setts.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
+    <link rel="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" type="text/css"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/generation_setts.css') }}">
 </head>
 <body>
-    <div class="generation-setts-page">
-        <form role="form" class="gen-setts-form" action="{{ url_for('generate') }}" method="POST">
-            <input type="text" name="course_id" value="{{ course_id }}" style="display: none;">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        <div id="flash-msg-container">
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible" role="alert" id="flash-msg">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endwith %}
+    <div class="generation-setts-page" hidden>
+        <form role="form" class="gen-setts-form" action="{{ url_for('generate') }}" method="POST" id="main-form">
+            <input type="text" name="course_id" value="{{ course_id }}" style="display: none;" id="course-id">
             <div id="get-back-cont">
                 <a id="get-back" href={{ url_for('courses') }}>
                     <i class="material-icons">undo</i>
@@ -26,6 +39,16 @@
                 <label for="testname">Название контрольной:</label>
                 <input type="text" name="name" class="form-control" id="testname" placeholder="Введите название контрольной">
             </div>
+            <div class="form-group" id="modules-select-group">
+                <label for="module-selection">Необходимые модули</label>
+                <div class="input-group mb-3" id="module-selection">
+                    <select name="module" id="multimodules" multiple="multiple">
+                        {% for  module in course.get_modules() %}
+                            <option>{{ module.get_name() }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
             <div class="form-group">
                 <label for="variant-num">Количество вариантов:</label><br>
                 <span class="minus minus1 bg-dark">-</span>
@@ -34,25 +57,18 @@
             </div>
             <div class="form-group">
                 <label for="tasks-num">Количество заданий в варианте:</label><br>
-                <span class="minus minus2 bg-dark">-</span>
+                <span class="minus minus2">-</span>
                 <input type="number" class="count2" name="task_qty" value="1" id="tasks-num" readonly>
-                <span class="plus plus2 bg-dark">+</span>
+                <span class="plus plus2">+</span>
             </div>
-            <div class="form-group">
-                <div class="input-group mb-3" id="module-selection">
-                    <select name="module" title="Выберите модуль ..." class="form-control" id="inputGroupSelect01">
-                        {% for  module in course.get_modules() %}
-                            <option>{{ module.get_name() }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-            <button type="submit" class="btn btn-success">Сгенерировать</button>
+            <button type="submit" class="btn btn-success" id="submit-btn">Сгенерировать</button>
         </form>
     </div>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
     <script>
         $(document).ready(function(){
             function setSlider(count, btn_l, btn_r, start, finish) {
@@ -69,8 +85,27 @@
                     }
                 });
             }
+
+            $('#multimodules').multiselect();
+
             setSlider('count1', 'plus1', 'minus1', 1, 4);
             setSlider('count2', 'plus2', 'minus2', 1, 20);
+            $('#submit-btn').prop('disabled', true);
+
+            $('.generation-setts-page').show();
+
+
+            function checkInputs() {
+                if ($('#multimodules').val().length === 0 || $('#testname').val() === '') {
+                    $('#submit-btn').prop('disabled', true);
+                } else {
+                    $('#submit-btn').prop('disabled', false);
+                }
+            }
+
+            $('#testname').on('input keyup', checkInputs);
+            $('#multimodules').change(checkInputs);
+
         });
     </script>
 </body>

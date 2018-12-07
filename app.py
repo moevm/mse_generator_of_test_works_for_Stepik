@@ -1,17 +1,14 @@
 # -*- encoding: utf-8 -*-
 
 import sys
-
-from flask import Flask, render_template, request, send_file, session, redirect, url_for, make_response
+from flask import Flask, render_template, request, send_file, session, redirect, url_for, make_response, flash
 from functools import wraps, update_wrapper
 from datetime import datetime
 import user
 import download
-import md_export
 import os
-import markdown
 import pickle
-from xhtml2pdf import pisa
+import convert
 
 def nocache(view):
     @wraps(view)
@@ -76,17 +73,14 @@ def courses():
 def course():
     if 'token' in session:
         course_id = request.args.get('id', default=None, type=int)
+        
         if not course_id:
             return redirect(url_for('courses'))
         else:
-            if not os.path.exists(str(course_id)) or not os.path.isdir(str(course_id)):
-                course = download.download_course(session['token'], course_id)
-                with open(os.path.join(str(course_id), 'course_parser.dat'), mode='wb') as f:
-                    pickle.dump(course, f)
-            else:
-                with open(os.path.join(str(course_id), 'course_parser.dat'), mode='rb') as f:
-                    course = pickle.load(f)
-
+            course = download.download_course(session['token'], course_id)
+            with open(os.path.join(str(course_id), 'course_parser.dat'), mode='wb') as f:
+                pickle.dump(course, f)
+            
             return render_template('generation_setts.html', course=course, course_id=course_id)
     else:
         return redirect(url_for('index'))
@@ -95,26 +89,21 @@ def course():
 def generate():
     with open(os.path.join(request.form['course_id'], 'course_parser.dat'), mode='rb') as f:
         course = pickle.load(f)
-    
+
+    selected_modules = request.form.getlist('module')
+
     for module in course.get_modules():
-        if module.get_name() == request.form['module']:
+        if module.get_name() in selected_modules:
             module.choose()
 
-    test_name = md_export.process(course, request.form['name'], request.form['var_qty'], request.form['task_qty'])
+    test_names = convert.process(course, request.form['name'], 
+    int(request.form['var_qty']), int(request.form['task_qty']))
 
-    # markdown.markdownFromFile(input=test_name, output=test_name.replace('.md', '.html'))
-    
-    # output = open(test_name.replace('.md', '.pdf'), mode='w+b')
-    # src = open(test_name.replace('.md', '.html'), mode='r', encoding='utf8')
-    
-    # pisa.CreatePDF(src.read(), dest=output)
-    
-    # output.close()
-    # src.close()
+    flash('Контрольная успешно сгенерировона!', 'info')
+    for var_name in test_names:
+        flash(var_name.split('/')[2], 'info')
 
-    return send_file(test_name, mimetype='text/markdown')
-    #return send_file(test_name.replace('.md', '.html'), mimetype='text/html')
-    #return send_file('Контрольная.pdf', mimetype='application/pdf')
+    return redirect(url_for('course', id=request.form['course_id']))
 
 @app.route('/logout')
 def logout():
