@@ -121,4 +121,3 @@
 
 Презентация первой итерации:  
 https://docs.google.com/presentation/d/1GXo8m8JXA-OC7c6_FMFOYaBImJtRXP8ZilnPeo2YIcY/edit?usp=sharing
->>>>>>> master
