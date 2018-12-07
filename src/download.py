@@ -38,7 +38,6 @@ class Course():
                                 chosen_steps.append(step)
         return chosen_steps
 
-
 class Module():
     def __init__(self, name):
         self.name = name
@@ -108,7 +107,6 @@ class Lesson():
     def get_status(self):
         return self.isChoose
 
-
 class Step():
     def __init__(self, lesson, type):
         self.path = ''
@@ -143,7 +141,6 @@ def fetch_object(obj_class, obj_id, token):
     response = requests.get(api_url,
                             headers={'Authorization': 'Bearer ' + token}).json()
     return response['{}s'.format(obj_class)][0]
-
 
 def fetch_objects(obj_class, obj_ids, token):
     objs = []
@@ -221,3 +218,4 @@ def download_course(token, course_id):
                     data['block']['text'] = cleanhtml(step['block']['text'])
                     f.write(json.dumps(data))
                     f.close()
+    return _course
