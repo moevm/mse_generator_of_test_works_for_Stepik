@@ -1,4 +1,3 @@
-<<<<<<< HEAD:src/download.py
 import os
 import json
 import requests
