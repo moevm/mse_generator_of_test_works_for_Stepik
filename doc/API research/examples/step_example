@@ -1,0 +1,39 @@
+{
+    'id': 507277,
+    'lesson': 180086,
+    'position': 2,
+    'status': 'ready',
+    'block': {
+                'name': 'choice',
+                'text': 'Вы можете изменить условие задания в этом поле и указать настройки ниже. <br><br> Чему равняется 1004 разделить на 2?',
+                'video': None,
+                'animation': None,
+                'options': {
+                                'is_multiple_choice': False
+                            },
+                'subtitle_files': []},
+    'actions': {
+                    'edit_instructions': '#',
+                    'submit': '#'
+                },
+    'progress': '77-507277',
+    'subscriptions': ['31-77-507277', '30-77-507277'],
+    'instruction': None,
+    'session': None,
+    'instruction_type': None,
+    'viewed_by': 0,
+    'passed_by': 0,
+    'correct_ratio': None,
+    'worth': 0,
+    'is_solutions_unlocked': False,
+    'solutions_unlocked_attempts': 3,
+    'has_submissions_restrictions': False,
+    'max_submissions_count': 3,
+    'variation': 1,
+    'variations_count': 1,
+    'create_date': '2018-10-10T19:03:29Z',
+    'update_date': '2018-10-10T19:03:29Z',
+    'discussions_count': 0,
+    'discussion_proxy': '77-507277-1',
+    'discussion_threads': ['77-507277-1', '77-507277-2']
+}

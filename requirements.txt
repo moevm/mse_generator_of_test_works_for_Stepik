@@ -1,4 +1,8 @@
 requests==2.20.1
 Flask==1.0.2
+<<<<<<< HEAD
+md2pdf==0.4
+=======
 xhtml2pdf==0.2.3
 markdown==3.0.1
+>>>>>>> master
