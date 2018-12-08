@@ -1,7 +1,5 @@
 FROM python:3.6
 
-RUN apt-get update && apt-get upgrade -y
-
 COPY ./requirements.txt /app/requirements.txt
 
 WORKDIR /app
