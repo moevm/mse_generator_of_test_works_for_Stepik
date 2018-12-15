@@ -1,15 +1,14 @@
 import json
-import download
 import random
 import os
 import shutil
-from md2pdf.core import md2pdf
 from weasyprint import HTML
 
 
 pdf_path = os.path.join(os.curdir, 'data/pdf') # папка для pdf
 answers_path = os.path.join(os.curdir, 'data/answers') # папка для ответов
 archive_path = os.path.join(os.curdir, 'works_archive') # папка для архива
+
 
 def generating_works(course, test_name, var_qty=1, task_qty=5):
     file_names = []
@@ -58,6 +57,7 @@ def generating_works(course, test_name, var_qty=1, task_qty=5):
         file_names.append(pdf_file_name)
     return file_names
 
+
 def choice(step, num):
     step_string = ""
     src = open(step.get_path(), 'r')
@@ -69,6 +69,7 @@ def choice(step, num):
     step_string += '</ol></div>'
     return step_string
 
+
 def number(step, num):
     step_string = ""
     src = open(step.get_path(), 'r')
@@ -78,6 +79,7 @@ def number(step, num):
     step_string += '    ' + 'Ответ:  \n</div>'
     return step_string
 
+
 def string(step, num):
     step_string = ""
     src = open(step.get_path(), 'r')
@@ -86,6 +88,7 @@ def string(step, num):
     step_string += '<div><p>' + str(num + 1) + '. ' + _step['block']['text'] + '(ответом является строка)</p>'
     step_string += '    ' + 'Ответ:  \n</div>'
     return step_string
+
 
 def archive():
     if (os.path.exists(archive_path)):
