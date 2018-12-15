@@ -173,7 +173,7 @@ def cleanhtml(raw_html):
     return cleantext.strip()
 
 def download_course(token, course_id):
-    plan = ''
+    plan = '<h1>Учебный план</h1>'
     token = token
     course = fetch_object('course', course_id, token=token)
     _course = Course(course['id'], course['title'])
@@ -193,7 +193,8 @@ def download_course(token, course_id):
             step_ids = lesson['steps']
             steps = fetch_objects('step', step_ids, token=token)  # Степы
             # print(steps[0])
-            plan += lesson['title'] + '\n' + steps[0]['block']['text'] + '<div><br></div>'         
+            if (steps[0]['block']['name']) == 'text':
+                plan += '<div>' + '<p>{}</p>'.format(lesson['title']) + steps[0]['block']['text'] + '</div>'
             for step in steps:  # Итерация по степам
                 if step['block']['name'] in ('choice', 'number', 'string'):
                     _step = Step(_lesson, step['block']['name'])
