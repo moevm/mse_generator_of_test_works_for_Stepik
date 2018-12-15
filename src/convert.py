@@ -8,6 +8,7 @@ from md2pdf.core import md2pdf
 
 md_path = os.path.join(os.curdir, 'data/md_works')  # папка для md
 pdf_path = os.path.join(os.curdir, 'data/test_works') # папка для pdf
+answers_path = os.path.join(os.curdir, 'data/answers')
 
 def generating_md(course, test_name, var_qty=1, task_qty=5):
     file_names = []
@@ -16,10 +17,15 @@ def generating_md(course, test_name, var_qty=1, task_qty=5):
     else:
         shutil.rmtree(md_path)
         os.makedirs(md_path)
-
+    if not (os.path.exists(answers_path)):
+        os.makedirs(answers_path)
+    else:
+        shutil.rmtree(answers_path)
+        os.makedirs(answers_path)
     for var_num in range(var_qty):
         file_name = os.path.join(md_path, test_name.replace(' ', '_') + '_var_{}'.format(var_num + 1) + '.md')
         file_names.append(file_name)
+        answers_file_name = os.path.join(answers_path, 'answers' + '_var_{}'.format(var_num + 1) + '.txt')
         
         with open(file_name, mode='w', encoding='utf8') as f:
             f.write('# ' + test_name + '  \n\n')
@@ -33,14 +39,19 @@ def generating_md(course, test_name, var_qty=1, task_qty=5):
             var = course.get_chosen()
             var = [var[i] for i in random.sample(range(len(var)), task_qty)]
 
+            af = open(answers_file_name, 'w')
+            af.close()
+            af = open(answers_file_name, 'a')
             for num, step in enumerate(var):
                 print(step.get_type())
+                print(step.get_answer())
                 if step.get_type() == 'number':
                     number(f, step.get_path(), num + 1)
                 elif step.get_type() == 'choice':
                     choiсe(f, step.get_path(), num + 1)
                 else:
                     string(f, step.get_path(), num + 1)
+                af.write(step.get_answer() + '\n')
     return file_names                
 
 def md_2_pdf():
