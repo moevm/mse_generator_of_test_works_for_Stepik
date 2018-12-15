@@ -49,8 +49,6 @@ def generating_md(course, test_name, var_qty=1, task_qty=5):
             af = open(answers_file_name, 'a')
             af.write('Вариант {}.'.format(var_num + 1) + '\n')
             for num, step in enumerate(var):
-                print(step.get_type())
-                print(step.get_answer())
                 if step.get_type() == 'number':
                     number(f, step.get_path(), num + 1)
                 elif step.get_type() == 'choice':
@@ -79,6 +77,7 @@ def md_2_pdf():
 
 def archive():
      shutil.make_archive('works_archieve', 'zip', os.path.join(os.curdir, 'data'))
+     return os.path.join(os.curdir, 'works_archieve')
 
 def choiсe(fp, step, num):
     src = open(step, mode='r')

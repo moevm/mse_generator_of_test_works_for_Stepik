@@ -4,6 +4,8 @@ import requests
 import datetime
 import sys
 import re
+from weasyprint import HTML
+
 
 class Course():
     def __init__(self, id, name):
@@ -171,11 +173,12 @@ def cleanhtml(raw_html):
     return cleantext.strip()
 
 def download_course(token, course_id):
+    plan = ''
     token = token
     course = fetch_object('course', course_id, token=token)
     _course = Course(course['id'], course['title'])
     sections = fetch_objects('section', course['sections'], token=token)  # Модули
-
+    
     for section in sections:  # Итерация по модулям
         unit_ids = section['units']
         units = fetch_objects('unit', unit_ids, token=token)  # Уроки
@@ -189,7 +192,8 @@ def download_course(token, course_id):
 
             step_ids = lesson['steps']
             steps = fetch_objects('step', step_ids, token=token)  # Степы
-
+            # print(steps[0])
+            plan += lesson['title'] + '\n' + steps[0]['block']['text'] + '<div><br></div>'         
             for step in steps:  # Итерация по степам
                 if step['block']['name'] in ('choice', 'number', 'string'):
                     _step = Step(_lesson, step['block']['name'])
@@ -231,7 +235,9 @@ def download_course(token, course_id):
                         'time': datetime.datetime.now().isoformat()
                     }
 
-                    data['block']['text'] = cleanhtml(step['block']['text'])
+                    data['block']['text'] = step['block']['text']
                     f.write(json.dumps(data))
                     f.close()
+    html = HTML(string=plan)
+    html.write_pdf('plan.pdf')
     return _course
