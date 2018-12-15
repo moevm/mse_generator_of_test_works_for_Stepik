@@ -4,6 +4,8 @@ import requests
 import datetime
 import sys
 import re
+from weasyprint import HTML
+
 
 class Course():
     def __init__(self, id, name):
@@ -117,6 +119,7 @@ class Step():
             self.isChoose = True
         else:
             self.isChoose = False
+        self.answer = ''    
 
     def get_type(self):
         return self.type
@@ -135,6 +138,12 @@ class Step():
 
     def get_status(self):
         return self.isChoose
+
+    def set_answer(self, answer):
+        self.answer = answer
+
+    def get_answer(self):
+        return self.answer       
 
 def fetch_object(obj_class, obj_id, token):
     api_url = '{}/api/{}s/{}'.format('https://stepik.org', obj_class, obj_id)
@@ -164,11 +173,12 @@ def cleanhtml(raw_html):
     return cleantext.strip()
 
 def download_course(token, course_id):
+    plan = '<h1>Учебный план</h1>'
     token = token
     course = fetch_object('course', course_id, token=token)
     _course = Course(course['id'], course['title'])
     sections = fetch_objects('section', course['sections'], token=token)  # Модули
-
+    
     for section in sections:  # Итерация по модулям
         unit_ids = section['units']
         units = fetch_objects('unit', unit_ids, token=token)  # Уроки
@@ -182,12 +192,22 @@ def download_course(token, course_id):
 
             step_ids = lesson['steps']
             steps = fetch_objects('step', step_ids, token=token)  # Степы
-
+            # print(steps[0])
+            if (steps[0]['block']['name']) == 'text':
+                plan += '<div>' + '<h3>{}</h3>'.format(lesson['title']) + steps[0]['block']['text'] + '</div>'
             for step in steps:  # Итерация по степам
                 if step['block']['name'] in ('choice', 'number', 'string'):
                     _step = Step(_lesson, step['block']['name'])
-                    _lesson.steps.append(_step)
                     step_source = fetch_object('step-source', step['id'], token=token)
+                    if step_source['block']['name'] == 'choice':
+                        for opt in step_source['block']['source']['options']:
+                            if opt['is_correct']:
+                                _step.set_answer(opt['text'])
+                    elif step_source['block']['name'] == 'number':
+                        _step.set_answer(step_source['block']['source']['options'][0]['answer'])
+                    elif step_source['block']['name'] == 'string':
+                        _step.set_answer(step_source['block']['source']['pattern'])
+                    _lesson.steps.append(_step)
                     path = [
                         '{}'.format(str(course['id']).zfill(2)),
                         '{}_{}'.format(str(section['position']).zfill(2), str(section['title']).replace(' ','_')),
@@ -215,7 +235,10 @@ def download_course(token, course_id):
                         'id': str(step['id']),
                         'time': datetime.datetime.now().isoformat()
                     }
+
                     data['block']['text'] = cleanhtml(step['block']['text'])
                     f.write(json.dumps(data))
                     f.close()
+    html = HTML(string=plan)
+    html.write_pdf('plan.pdf')
     return _course

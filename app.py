@@ -96,12 +96,13 @@ def generate():
         if module.get_name() in selected_modules:
             module.choose()
 
-    test_names = convert.process(course, request.form['name'], 
+    test_names = convert.generating_works(course, request.form['name'], 
     int(request.form['var_qty']), int(request.form['task_qty']))
+    print(convert.archive())
 
     flash('Контрольная успешно сгенерировона!', 'info')
     for var_name in test_names:
-        flash(var_name.split('/')[2], 'info')
+        flash(var_name.split('/')[3], 'info')
 
     return redirect(url_for('course', id=request.form['course_id']))
 
