@@ -21,7 +21,7 @@ def generating_works(course, test_name, var_qty=1, task_qty=5):
     else:
         shutil.rmtree(answers_path)
         os.makedirs(answers_path)
-    all_answers_file_name = os.path.join(answers_path, 'all_answers' + '.txt')
+    all_answers_file_name = os.path.join(answers_path, 'all_answers.txt')
     aaf = open(all_answers_file_name, 'w')
     aaf.close()
     aaf = open(all_answers_file_name, 'a') 
