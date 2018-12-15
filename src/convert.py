@@ -5,9 +5,12 @@ import os
 import shutil
 from md2pdf.core import md2pdf
 
-def process(course, test_name, var_qty=1, task_qty=5):
+
+md_path = os.path.join(os.curdir, 'data/md_works')  # папка для md
+pdf_path = os.path.join(os.curdir, 'data/test_works') # папка для pdf
+
+def generating_md(course, test_name, var_qty=1, task_qty=5):
     file_names = []
-    md_path = os.path.join(os.curdir, './md_works')
     if not (os.path.exists(md_path)):
         os.makedirs(md_path)
     else:
@@ -38,9 +41,10 @@ def process(course, test_name, var_qty=1, task_qty=5):
                     choiсe(f, step.get_path(), num + 1)
                 else:
                     string(f, step.get_path(), num + 1)
+    return file_names                
 
+def md_2_pdf():
     pdf_files = []
-    pdf_path = os.path.join(os.curdir, 'test_works') # папка для pdf
     if not (os.path.exists(pdf_path)):
         os.makedirs(pdf_path)
     else:
@@ -49,7 +53,7 @@ def process(course, test_name, var_qty=1, task_qty=5):
     md_list = os.listdir(md_path)
     for md_file in md_list:
         md2pdf(os.path.join(pdf_path, md_file[:-3] + '.pdf'), md_file_path=os.path.join(md_path, md_file),
-        css_file_path=os.path.join(os.curdir, './static/css/work.css'))
+        css_file_path=os.path.join('static/', 'css/work.css'))
         pdf_files.append(os.path.join(pdf_path, md_file[:-3] + '.pdf'))                
     print(pdf_files)
     return pdf_files
