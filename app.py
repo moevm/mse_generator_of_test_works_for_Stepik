@@ -96,11 +96,9 @@ def generate():
         if module.get_name() in selected_modules:
             module.choose()
 
-    convert.generating_md(course, request.form['name'], 
+    test_names = convert.generating_works(course, request.form['name'], 
     int(request.form['var_qty']), int(request.form['task_qty']))
-    test_names = convert.md_2_pdf()
     print(convert.archive())
-    print("test names: ", test_names)
 
     flash('Контрольная успешно сгенерировона!', 'info')
     for var_name in test_names:

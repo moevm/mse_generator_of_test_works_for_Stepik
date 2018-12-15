@@ -235,7 +235,7 @@ def download_course(token, course_id):
                         'time': datetime.datetime.now().isoformat()
                     }
 
-                    data['block']['text'] = step['block']['text']
+                    data['block']['text'] = cleanhtml(step['block']['text'])
                     f.write(json.dumps(data))
                     f.close()
     html = HTML(string=plan)
