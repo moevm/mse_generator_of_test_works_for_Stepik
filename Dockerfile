@@ -12,7 +12,8 @@ RUN apt-get update && apt-get install -y \
     libpangocairo-1.0-0 \
     libgdk-pixbuf2.0-0 \
     libffi-dev \
-    shared-mime-info
+    shared-mime-info \
+    locales
 
 COPY ./requirements.txt /app/requirements.txt
 
@@ -21,5 +22,8 @@ WORKDIR /app
 RUN pip3 install -r requirements.txt
 
 COPY . /app
+
+RUN locale-gen ru_RU.UTF-8
+ENV LANG='ru_RU.UTF-8' LANGUAGE='ru_RU:ru' LC_ALL='ru_RU.UTF-8'
 
 CMD ["python3", "app.py"]

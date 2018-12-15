@@ -1,13 +1,16 @@
+# -*- coding: utf-8 -*-
+
 import sys
 sys.path.append('./src')
 
-from flask import Flask, render_template, request, send_file, session, redirect, url_for, make_response, flash
+from flask import Flask, render_template, request, send_file, session, redirect, url_for, make_response, jsonify
 from functools import wraps, update_wrapper
 from datetime import datetime
 import user
 import download
 import os
 import pickle
+import pathlib
 import convert
 
 def nocache(view):
@@ -77,9 +80,14 @@ def course():
         if not course_id:
             return redirect(url_for('courses'))
         else:
-            course = download.download_course(session['token'], course_id)
-            with open(os.path.join(str(course_id), 'course_parser.dat'), mode='wb') as f:
-                pickle.dump(course, f)
+            isDownload = request.args.get('download', default=None, type=bool)
+            if not isDownload:
+                course = download.download_course(session['token'], course_id)
+                with open(os.path.join(str(course_id), 'course_parser.dat'), mode='wb') as f:
+                    pickle.dump(course, f)
+            else:
+                with open(os.path.join(str(course_id), 'course_parser.dat'), mode='rb') as f:
+                    course = pickle.load(f)            
             
             return render_template('generation_setts.html', course=course, course_id=course_id)
     else:
@@ -96,15 +104,51 @@ def generate():
         if module.get_name() in selected_modules:
             module.choose()
 
-    test_names = convert.generating_works(course, request.form['name'], 
-    int(request.form['var_qty']), int(request.form['task_qty']))
-    print(convert.archive())
+    convert.generating_works(course, request.form['name'], 
+                                int(request.form['var_qty']), int(request.form['task_qty']))
+    zip_path = convert.archive()
 
-    flash('Контрольная успешно сгенерировона!', 'info')
-    for var_name in test_names:
-        flash(var_name.split('/')[3], 'info')
+    return send_file(zip_path, 'application/zip')
 
-    return redirect(url_for('course', id=request.form['course_id']))
+@app.route('/plan')
+def get_plan():
+    if 'token' in session:
+        course_id = request.args.get('id', default=None, type=int)
+        
+        if not course_id:
+            return redirect(url_for('courses'))
+        else:
+            isDownload = request.args.get('download', default=None, type=bool)
+            if not isDownload:
+                download.download_course(session['token'], course_id)
+            
+            return send_file('plan.pdf', 'application/pdf')
+    else:
+        return redirect(url_for('index'))
+
+@app.route('/check')
+def get_save_status():
+    if 'token' in session:
+        course_id = request.args.get('id', default=None, type=int)
+        
+        if not course_id:
+            return redirect(url_for('courses'))
+        else:
+            course_path = pathlib.Path(str(course_id))
+            if os.path.exists(course_path):
+                create_time = os.path.getctime(course_path)
+                create_time = datetime.fromtimestamp(create_time)
+                return jsonify({
+                    'isSave': True,
+                    'createDate': create_time
+                })
+            else:
+                return jsonify({
+                    'isSave': False,
+                })
+    else:
+        return redirect(url_for('index'))
+
 
 @app.route('/logout')
 def logout():
