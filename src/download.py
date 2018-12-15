@@ -241,6 +241,9 @@ def download_course(token, course_id):
                     data['block']['text'] = cleanhtml(step['block']['text'])
                     f.write(json.dumps(data))
                     f.close()
+    data_path = os.path.join(os.curdir, '{}'.format(_course.get_id()))                
+    plan_path = os.path.join(data_path, 'plan.pdf')
+    print(plan_path)
     html = HTML(string=plan)
-    html.write_pdf('plan.pdf')
+    html.write_pdf(plan_path)
     return _course

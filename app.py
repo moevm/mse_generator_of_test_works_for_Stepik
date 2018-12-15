@@ -104,9 +104,8 @@ def generate():
         if module.get_name() in selected_modules:
             module.choose()
 
-    convert.generating_works(course, request.form['name'], 
+    zip_path = convert.generating_works(course, request.form['name'], 
                                 int(request.form['var_qty']), int(request.form['task_qty']))
-    zip_path = convert.archive()
 
     return send_file(zip_path, 'application/zip')
 
