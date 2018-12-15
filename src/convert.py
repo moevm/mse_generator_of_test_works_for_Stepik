@@ -6,9 +6,9 @@ import shutil
 from md2pdf.core import md2pdf
 
 
-md_path = os.path.join(os.curdir, 'data/md_works')  # папка для md
-pdf_path = os.path.join(os.curdir, 'data/test_works') # папка для pdf
-answers_path = os.path.join(os.curdir, 'data/answers')
+md_path = os.path.join(os.curdir, 'data/md')  # папка для md
+pdf_path = os.path.join(os.curdir, 'data/pdf') # папка для pdf
+answers_path = os.path.join(os.curdir, 'data/answers') # папка для ответов
 
 def generating_md(course, test_name, var_qty=1, task_qty=5):
     file_names = []
@@ -22,11 +22,16 @@ def generating_md(course, test_name, var_qty=1, task_qty=5):
     else:
         shutil.rmtree(answers_path)
         os.makedirs(answers_path)
+    all_answers_file_name = os.path.join(answers_path, 'all_answers' + '.txt')
+    aaf = open(all_answers_file_name, 'w')
+    aaf.close()
+    aaf = open(all_answers_file_name, 'a') 
+    aaf.write("Работа: {}".format(test_name) + '\n\n')
     for var_num in range(var_qty):
         file_name = os.path.join(md_path, test_name.replace(' ', '_') + '_var_{}'.format(var_num + 1) + '.md')
         file_names.append(file_name)
         answers_file_name = os.path.join(answers_path, 'answers' + '_var_{}'.format(var_num + 1) + '.txt')
-        
+        aaf.write('Вариант {}'.format(var_num + 1) + ': \n')
         with open(file_name, mode='w', encoding='utf8') as f:
             f.write('# ' + test_name + '  \n\n')
             f.write('## Вариант {}  \n\n'.format(var_num + 1))
@@ -42,6 +47,7 @@ def generating_md(course, test_name, var_qty=1, task_qty=5):
             af = open(answers_file_name, 'w')
             af.close()
             af = open(answers_file_name, 'a')
+            af.write('Вариант {}.'.format(var_num + 1) + '\n')
             for num, step in enumerate(var):
                 print(step.get_type())
                 print(step.get_answer())
@@ -51,7 +57,9 @@ def generating_md(course, test_name, var_qty=1, task_qty=5):
                     choiсe(f, step.get_path(), num + 1)
                 else:
                     string(f, step.get_path(), num + 1)
-                af.write(step.get_answer() + '\n')
+                af.write('{}. '.format(num + 1) + step.get_answer() + '\n')
+                aaf.write('{}. '.format(num + 1) + step.get_answer() + '\n')
+            aaf.write('\n\n')    
     return file_names                
 
 def md_2_pdf():
@@ -68,6 +76,9 @@ def md_2_pdf():
         pdf_files.append(os.path.join(pdf_path, md_file[:-3] + '.pdf'))                
     print(pdf_files)
     return pdf_files
+
+def archive():
+     shutil.make_archive('works_archieve', 'zip', os.path.join(os.curdir, 'data'))
 
 def choiсe(fp, step, num):
     src = open(step, mode='r')

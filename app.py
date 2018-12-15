@@ -99,6 +99,7 @@ def generate():
     convert.generating_md(course, request.form['name'], 
     int(request.form['var_qty']), int(request.form['task_qty']))
     test_names = convert.md_2_pdf()
+    convert.archive()
     print("test names: ", test_names)
 
     flash('Контрольная успешно сгенерировона!', 'info')
