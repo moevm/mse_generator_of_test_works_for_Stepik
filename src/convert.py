@@ -76,7 +76,7 @@ def number(step, num):
     src = open(step.get_path(), 'r')
     _step = json.load(src)
     src.close()
-    step_string += '<div><p>' + str(num + 1) + '. ' + _step['block']['text'] + '(ответом является число)</p>'
+    step_string += '<div><p>' + str(num + 1) + '. ' + _step['block']['text'] + '</p>' + '<p><i>(ответом является число)</i></p>'
     step_string += '    ' + 'Ответ:  \n</div>'
     return step_string
 
@@ -85,7 +85,7 @@ def string(step, num):
     src = open(step.get_path(), 'r')
     _step = json.load(src)
     src.close()
-    step_string += '<div><p>' + str(num + 1) + '. ' + _step['block']['text'] + '(ответом является строка)</p>'
+    step_string += '<div><p>' + str(num + 1) + '. ' + _step['block']['text'] + '</p>' + '<p><i>(ответом является строка)</i></p>'
     step_string += '    ' + 'Ответ:  \n</div>'
     return step_string
 
