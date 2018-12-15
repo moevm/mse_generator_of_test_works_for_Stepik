@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import sys
 sys.path.append('./src')
 
@@ -96,15 +98,26 @@ def generate():
         if module.get_name() in selected_modules:
             module.choose()
 
-    test_names = convert.generating_works(course, request.form['name'], 
-    int(request.form['var_qty']), int(request.form['task_qty']))
-    print(convert.archive())
+    convert.generating_works(course, request.form['name'], 
+                                int(request.form['var_qty']), int(request.form['task_qty']))
+    zip_path = convert.archive()
 
-    flash('Контрольная успешно сгенерировона!', 'info')
-    for var_name in test_names:
-        flash(var_name.split('/')[3], 'info')
+    return send_file(zip_path, 'application/zip')
 
-    return redirect(url_for('course', id=request.form['course_id']))
+@app.route('/plan')
+def get_plan():
+    if 'token' in session:
+        course_id = request.args.get('id', default=None, type=int)
+        
+        if not course_id:
+            return redirect(url_for('courses'))
+        else:
+            download.download_course(session['token'], course_id)
+            
+            return send_file('plan.pdf', 'application/pdf')
+    else:
+        return redirect(url_for('index'))
+
 
 @app.route('/logout')
 def logout():

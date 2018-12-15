@@ -3,7 +3,6 @@ import download
 import random
 import os
 import shutil
-from md2pdf.core import md2pdf
 from weasyprint import HTML
 
 
@@ -36,6 +35,9 @@ def generating_works(course, test_name, var_qty=1, task_qty=5):
         var_string += '<h1>{}</h1>'.format(test_name) + '<h2>Вариант {}</h2>'.format(var_num + 1) + '<h3>ФИО:</h3>'
         var_string += '<h3>Группа:</h3>' + '<h3>Дата</h3><br>'
         var = course.get_chosen()
+        while len(var) < task_qty:
+            var += var
+            
         var = [var[i] for i in random.sample(range(len(var)), task_qty)]
 
         af = open(answers_file_name, 'w')

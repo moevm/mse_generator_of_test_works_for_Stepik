@@ -9,18 +9,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/generation_setts.css') }}">
 </head>
 <body>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        <div id="flash-msg-container">
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }} alert-dismissible" role="alert" id="flash-msg">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    {{ message }}
-                </div>
-            {% endfor %}
-        </div>
-    {% endwith %}
     <div class="generation-setts-page" hidden>
         <form role="form" class="gen-setts-form" action="{{ url_for('generate') }}" method="POST" id="main-form">
             <input type="text" name="course_id" value="{{ course_id }}" style="display: none;" id="course-id">
