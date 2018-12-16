@@ -3,7 +3,7 @@
 import sys
 sys.path.append('./src')
 
-from flask import Flask, render_template, request, send_file, session, redirect, url_for, make_response, jsonify
+from flask import *
 from functools import wraps, update_wrapper
 from datetime import datetime
 import user
@@ -81,10 +81,16 @@ def course():
             return redirect(url_for('courses'))
         else:
             isDownload = request.args.get('download', default=None, type=bool)
-            if not isDownload:
+            if isDownload:
                 course = download.download_course(session['token'], course_id)
-                with open(os.path.join(str(course_id), 'course_parser.dat'), mode='wb') as f:
-                    pickle.dump(course, f)
+                if not course:
+                    return '''
+                    Ошибка загрузки курса. 
+                    Возможно он пустой! 
+                    Или в нем нет подходящих заданий: number, string, choice'''
+                else:
+                    with open(os.path.join(str(course_id), 'course_parser.dat'), mode='wb') as f:
+                        pickle.dump(course, f)
             else:
                 with open(os.path.join(str(course_id), 'course_parser.dat'), mode='rb') as f:
                     course = pickle.load(f)            
@@ -104,13 +110,17 @@ def generate():
         if module.get_name() in selected_modules:
             module.choose()
 
-    convert.generating_works(course, request.form['name'], 
+    k = convert.generating_works(course, request.form['name'], 
                                 int(request.form['var_qty']), int(request.form['task_qty']))
-    zip_path = convert.archive()
 
-    return send_file(zip_path, 'application/zip')
-
+    print(k)                            
+    if k:
+        zip_path = convert.archive(course)
+        return send_file(zip_path, 'application/zip')
+    # else:    if no steps
+    
 @app.route('/plan')
+@nocache
 def get_plan():
     if 'token' in session:
         course_id = request.args.get('id', default=None, type=int)
@@ -119,10 +129,17 @@ def get_plan():
             return redirect(url_for('courses'))
         else:
             isDownload = request.args.get('download', default=None, type=bool)
-            if not isDownload:
-                download.download_course(session['token'], course_id)
-            
-            return send_file('plan.pdf', 'application/pdf')
+            if isDownload:
+                course = download.download_course(session['token'], course_id)
+                if not course:
+                    return '''
+                    Ошибка загрузки курса. 
+                    Возможно он пустой! 
+                    Или в нем нет подходящих заданий: number, string, choice'''
+                with open(os.path.join(str(course_id), 'course_parser.dat'), mode='wb') as f:
+                    pickle.dump(course, f)
+                    
+            return send_file(os.path.join(str(course_id), 'plan.pdf'), 'application/pdf')
     else:
         return redirect(url_for('index'))
 
