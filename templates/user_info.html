@@ -56,29 +56,51 @@
 <script>
     $(document).ready(function(){
         $('#select-button2').on('click', function () {
-            $.get('/plan');
+            if (!checkCourseLoad()) {
+                $.get(`plan?id=${$('#inputGroupSelect02').val()}&download=true`);
+            } else {
+                $.get(`plan?id=${$('#inputGroupSelect02').val()}&download=false`);
+            }
         });
 
         $(".user-form").submit(function(e) {
-            if (!checkCourseLoad()) {
+            if (checkCourseLoad()) {
                 e.preventDefault();
             }
         });
 
+        $("#yes-btn").on('click', function () {
+            sendGETtoCourse(true)
+        });
+
+        $("#no-btn").on('click', function () {
+            sendGETtoCourse(false)
+        });
+
+        function sendGETtoCourse(download) {
+            $.ajax({
+                url: `course?id=${$('#inputGroupSelect02').val()}&download=${download}`,
+                type: 'GET',
+                error: function () {
+                    alert('GET course error');
+                },
+            });
+        }
+
         function checkCourseLoad() {
             let isLoaded = false;
             $.ajax({
-                url: `/check?id=${$('#inputGroupSelect02').val()}`,
+                url: `check?id=${$('#inputGroupSelect02').val()}`,
                 type: 'GET',
                 success: function (data) {
-                    isLoaded = true;
                     if (data.isSave) {
+                        isLoaded = true;
                         $('#course-date').val('Курс был скачен: ' + new Date(data.createDate).toLocaleDateString());
-                        document.getElementById('id01').style.display='block'
+                        document.getElementById('id01').style.display='block';
                     }
                 },
                 error: function () {
-                    alert('error');
+                    alert('check error');
                 },
             });
             return isLoaded;
