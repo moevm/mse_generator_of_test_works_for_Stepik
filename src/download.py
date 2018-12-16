@@ -194,7 +194,6 @@ def download_course(token, course_id):
 
             step_ids = lesson['steps']
             steps = fetch_objects('step', step_ids, token=token)  # Степы
-            # print(steps[0])
             if (steps[0]['block']['name']) == 'text':
                 plan += '<div>' + '<h3>{}</h3>'.format(lesson['title']) + steps[0]['block']['text'] + '</div>'
             for step in steps:  # Итерация по степам
@@ -230,6 +229,7 @@ def download_course(token, course_id):
                         os.makedirs(os.path.join(os.curdir, *path[:-1]))
                     except:
                         pass
+
                     filename = os.path.join(os.curdir, *path)
                     f = open(filename, 'w')
                     data = {
@@ -238,12 +238,14 @@ def download_course(token, course_id):
                         'time': datetime.datetime.now().isoformat()
                     }
 
-                    data['block']['text'] = cleanhtml(step['block']['text'])
                     f.write(json.dumps(data))
                     f.close()
-    data_path = os.path.join(os.curdir, '{}'.format(_course.get_id()))                
+    
+    data_path = os.path.join(os.curdir, '{}'.format(_course.get_id()))
+    if not os.path.exists(data_path):
+        return None
+
     plan_path = os.path.join(data_path, 'plan.pdf')
-    print(plan_path)
     html = HTML(string=plan)
     html.write_pdf(plan_path)
     return _course
