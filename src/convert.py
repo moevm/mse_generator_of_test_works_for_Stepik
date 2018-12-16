@@ -3,7 +3,7 @@ import download
 import random
 import os
 import shutil
-#from weasyprint import HTML
+from weasyprint import HTML
 
 
 def generating_works(course, test_name, var_qty=1, task_qty=5):
