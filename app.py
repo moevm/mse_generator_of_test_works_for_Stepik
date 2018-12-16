@@ -83,14 +83,8 @@ def course():
             isDownload = request.args.get('download', default=None, type=bool)
             if isDownload:
                 course = download.download_course(session['token'], course_id)
-                if not course:
-                    return '''
-                    Ошибка загрузки курса. 
-                    Возможно он пустой! 
-                    Или в нем нет подходящих заданий: number, string, choice'''
-                else:
-                    with open(os.path.join(str(course_id), 'course_parser.dat'), mode='wb') as f:
-                        pickle.dump(course, f)
+                with open(os.path.join(str(course_id), 'course_parser.dat'), mode='wb') as f:
+                    pickle.dump(course, f)
             else:
                 with open(os.path.join(str(course_id), 'course_parser.dat'), mode='rb') as f:
                     course = pickle.load(f)            
@@ -110,14 +104,15 @@ def generate():
         if module.get_name() in selected_modules:
             module.choose()
 
-    k = convert.generating_works(course, request.form['name'], 
+    result = convert.generating_works(course, request.form['name'], 
                                 int(request.form['var_qty']), int(request.form['task_qty']))
 
-    print(k)                            
-    if k:
+    if result:
         zip_path = convert.archive(course)
         return send_file(zip_path, 'application/zip')
-    # else:    if no steps
+    else:
+        flash('Отсутствуют задания для генерации', 'error')
+        return redirect(url_for('course', id=request.form['course_id'], download=False))
     
 @app.route('/plan')
 @nocache
@@ -131,11 +126,6 @@ def get_plan():
             isDownload = request.args.get('download', default=None, type=bool)
             if isDownload:
                 course = download.download_course(session['token'], course_id)
-                if not course:
-                    return '''
-                    Ошибка загрузки курса. 
-                    Возможно он пустой! 
-                    Или в нем нет подходящих заданий: number, string, choice'''
                 with open(os.path.join(str(course_id), 'course_parser.dat'), mode='wb') as f:
                     pickle.dump(course, f)
                     
