@@ -9,8 +9,7 @@ from weasyprint import HTML
 def generating_works(course, test_name, var_qty=1, task_qty=5):
     pdf_path = os.path.join(os.curdir, '{}'.format(course.get_id()), 'data/pdf') # папка для pdf
     answers_path = os.path.join(os.curdir, '{}'.format(course.get_id()), 'data/answers') # папка для ответов
-    archive_path = os.path.join(os.curdir, '{}'.format(course.get_id()), 'works_archive') # папка для архива
-    
+    file_names = []
     if not (os.path.exists(pdf_path)):
         os.makedirs(pdf_path)
     else:
@@ -56,10 +55,8 @@ def generating_works(course, test_name, var_qty=1, task_qty=5):
         html = HTML(string=var_string)
         pdf_file_name = os.path.join(pdf_path,'{}_var_{}.pdf'.format(test_name, var_num + 1))
         html.write_pdf(pdf_file_name)
-        ret = []
-        ret.append(archive_path)
-        ret.append(course.get_id())
-    return ret
+        file_names.append('{}_var_{}.pdf'.format(test_name, var_num + 1))
+    return file_names
 
 def choice(step, num):
     step_string = ""
@@ -90,8 +87,9 @@ def string(step, num):
     step_string += '    ' + 'Ответ:  \n</div>'
     return step_string
 
-def archive(archive_path, course_id):
+def archive(course):
+    archive_path = os.path.join(os.curdir, '{}'.format(course.get_id()), 'works_archive') # папка для архива
     if (os.path.exists(archive_path)):
         shutil.rmtree(archive_path)
-    shutil.make_archive(os.path.join(archive_path, 'stepik_works'), 'zip', os.path.join(os.curdir, '{}'.format(course_id), 'data'))
+    shutil.make_archive(os.path.join(archive_path, 'stepik_works'), 'zip', os.path.join(os.curdir, '{}'.format(course.get_id()), 'data'))
     return os.path.join(archive_path, 'stepik_works.zip')
