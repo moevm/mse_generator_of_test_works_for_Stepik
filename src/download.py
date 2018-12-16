@@ -180,6 +180,9 @@ def download_course(token, course_id):
     course = fetch_object('course', course_id, token=token)
     _course = Course(course['id'], course['title'])
     sections = fetch_objects('section', course['sections'], token=token)  # Модули
+    data_path = os.path.join(os.curdir, '{}'.format(_course.get_id()))
+    if not os.path.exists(data_path):
+        os.mkdir(data_path)
     
     for section in sections:  # Итерация по модулям
         unit_ids = section['units']
@@ -241,10 +244,6 @@ def download_course(token, course_id):
                     f.write(json.dumps(data))
                     f.close()
     
-    data_path = os.path.join(os.curdir, '{}'.format(_course.get_id()))
-    if not os.path.exists(data_path):
-        return None
-
     plan_path = os.path.join(data_path, 'plan.pdf')
     html = HTML(string=plan)
     html.write_pdf(plan_path)

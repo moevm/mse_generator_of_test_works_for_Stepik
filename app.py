@@ -110,12 +110,15 @@ def generate():
         if module.get_name() in selected_modules:
             module.choose()
 
-    convert.generating_works(course, request.form['name'], 
+    k = convert.generating_works(course, request.form['name'], 
                                 int(request.form['var_qty']), int(request.form['task_qty']))
-    zip_path = convert.archive(course)                            
 
-    return send_file(zip_path, 'application/zip')
-
+    print(k)                            
+    if k:
+        zip_path = convert.archive(course)
+        return send_file(zip_path, 'application/zip')
+    # else:    if no steps
+    
 @app.route('/plan')
 @nocache
 def get_plan():
