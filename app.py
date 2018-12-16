@@ -41,7 +41,8 @@ def login():
     token = user.get_token(request.form['client_id'], request.form['client_secret'])
 
     if not token:
-        return 'Unable to authorize with provided credentials'
+        flash('Unable to authorize with provided credentials', 'error')
+        return render_template('index.html')
     else:
         session['token'] = token
         return redirect(url_for('courses'))
