@@ -6,9 +6,12 @@ def get_token(client_id, client_secret):
     response = requests.post('https://stepik.org/oauth2/token/',
                             data={'grant_type': 'client_credentials'},
                             auth=auth)
-    token = response.json()['access_token']
-
-    return token
+    try:
+        token = response.json()['access_token']
+    except:
+        return None
+    else:
+        return token
 
 def get_user_name(token):
     api_url = 'https://stepik.org/api/stepics/1'  # should be stepic with "c"!

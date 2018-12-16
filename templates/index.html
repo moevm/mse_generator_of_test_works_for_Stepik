@@ -2,9 +2,24 @@
   <head>
     <meta charset="utf-8">
     <title>Генерация контрольных для Stepic</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
+    <link rel="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" type="text/css"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
   </head>
   <body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      <div id="flash-msg-container">
+          {% for category, message in messages %}
+              <div class="alert alert-{{ category }} alert-dismissible" role="alert" id="flash-msg">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+                  {{ message }}
+              </div>
+          {% endfor %}
+      </div>
+    {% endwith %}
     <div class="login-page">
       <div class="form">
         <form class="login-form" action="{{ url_for('login') }}", method="POST">
