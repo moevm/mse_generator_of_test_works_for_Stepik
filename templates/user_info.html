@@ -57,7 +57,7 @@
     $(document).ready(function(){
         $('#select-button2').on('click', function () {
             if (checkCourseLoad()) {
-                $.get(`plan?id=${$('#inputGroupSelect02').val()}&download=false`);
+                window.location = `http://127.0.0.1:5000/plan?id=${$('#inputGroupSelect02').val()}&download=false`
             }
         });
 
@@ -68,22 +68,12 @@
         });
 
         $("#yes-btn").on('click', function () {
-            sendGETtoCourse(true)
+            window.location = `http://127.0.0.1:5000/course?id=${$('#inputGroupSelect02').val()}&download=true`;
         });
 
         $("#no-btn").on('click', function () {
-            sendGETtoCourse(false)
+            window.location = `http://127.0.0.1:5000/course?id=${$('#inputGroupSelect02').val()}&download=false`;
         });
-
-        function sendGETtoCourse(download) {
-            $.ajax({
-                url: `course?id=${$('#inputGroupSelect02').val()}&download=${download}`,
-                type: 'GET',
-                error: function () {
-                    alert('GET course error');
-                },
-            });
-        }
 
         function checkCourseLoad() {
             let isLoaded = false;
