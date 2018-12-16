@@ -56,9 +56,7 @@
 <script>
     $(document).ready(function(){
         $('#select-button2').on('click', function () {
-            if (!checkCourseLoad()) {
-                $.get(`plan?id=${$('#inputGroupSelect02').val()}&download=true`);
-            } else {
+            if (checkCourseLoad()) {
                 $.get(`plan?id=${$('#inputGroupSelect02').val()}&download=false`);
             }
         });
