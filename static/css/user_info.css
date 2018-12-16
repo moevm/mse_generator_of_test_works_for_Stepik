@@ -33,7 +33,6 @@ body {
     text-transform: uppercase;
     outline: 0;
     background: #4CAF50;
-    width: 100%;
     border: 0;
     padding: 15px;
     color: #FFFFFF;
@@ -41,6 +40,7 @@ body {
     -webkit-transition: all 0.3 ease;
     transition: all 0.3 ease;
     cursor: pointer;
+    margin-left: 10px;
 }
 
 .form button:hover,.form button:active,.form button:focus {
@@ -52,10 +52,10 @@ body {
     width: 100%;
 }
 
-#select-button {
-    margin-top: 40px;
-    margin-left: 25%;
-    margin-right: 25%;
+#buttons {
+    margin-top: 20px;
+    margin-left: 30px;
+    display: flex;
 }
 
 #logout {
