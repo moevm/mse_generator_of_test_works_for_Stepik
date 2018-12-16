@@ -5,7 +5,6 @@ import os
 import shutil
 from weasyprint import HTML
 
-
 def generating_works(course, test_name, var_qty=1, task_qty=5):
     pdf_path = os.path.join(os.curdir, '{}'.format(course.get_id()), 'data/pdf') # папка для pdf
     answers_path = os.path.join(os.curdir, '{}'.format(course.get_id()), 'data/answers') # папка для ответов
@@ -30,8 +29,8 @@ def generating_works(course, test_name, var_qty=1, task_qty=5):
             answers_file_name = os.path.join(answers_path, 'answers' + '_var_{}'.format(var_num + 1) + '.txt')
             aaf.write('Вариант {}'.format(var_num + 1) + ': \n')
 
-            var_string += '<h1>{}</h1>'.format(test_name) + '<h2>Вариант {}</h2>'.format(var_num + 1) + '<h3>ФИО:</h3>'
-            var_string += '<h3>Группа:</h3>' + '<h3>Дата</h3><br>'
+            var_string += '<h1>{}</h1>'.format(test_name) + '<h2>Вариант {}</h2>'.format(var_num + 1) + '<h3><i>ФИО:<i></h3>'
+            var_string += '<h3><i>Группа:<i></h3>' + '<h3><i>Дата<i></h3><br>'
             var = course.get_chosen()
             while len(var) < task_qty:
                 var += var
@@ -64,9 +63,9 @@ def choice(step, num):
     src = open(step.get_path(), 'r')
     _step = json.load(src)
     src.close()
-    step_string += '<div><p>' + str(num + 1) + '. ' + _step['block']['text'] + '</p><ol>'
+    step_string += '<div><p>' + '<b>' + str(num + 1) + '</b>' + '. ' + _step['block']['text'] + '</p><ol>'
     for option in _step['block']['source']['options']:
-        step_string += '<li>' + '- ' + option['text'] + '</li>'
+        step_string += '<li>' + ' ' + option['text'] + '</li>'
     step_string += '</ol></div>'
     return step_string
 
@@ -75,8 +74,8 @@ def number(step, num):
     src = open(step.get_path(), 'r')
     _step = json.load(src)
     src.close()
-    step_string += '<div><p>' + str(num + 1) + '. ' + _step['block']['text'] + '</p>' + '<p><i>(ответом является число)</i></p>'
-    step_string += '    ' + 'Ответ:  \n</div>'
+    step_string += '<div><p>' + '<b>' + str(num + 1) + '</b>' + '. ' + _step['block']['text'] + '</p>' + '<p><i>(ответом является число)</i></p>'
+    step_string += '    ' + '<b>Ответ:</b>  \n</div>'
     return step_string
 
 def string(step, num):
@@ -84,8 +83,8 @@ def string(step, num):
     src = open(step.get_path(), 'r')
     _step = json.load(src)
     src.close()
-    step_string += '<div><p>' + str(num + 1) + '. ' + _step['block']['text'] + '</p>' + '<p><i>(ответом является строка)</i></p>'
-    step_string += '    ' + 'Ответ:  \n</div>'
+    step_string += '<div><p>' + '<b>' + str(num + 1) + '</b>' + '. ' + _step['block']['text'] + '</p>' + '<p><i>(ответом является строка)</i></p>'
+    step_string += '    ' + '<b>Ответ</b>:  \n</div>'
     return step_string
 
 def archive(course):
