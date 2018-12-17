@@ -3,6 +3,7 @@
 import sys
 sys.path.append('./src')
 
+from distutils.util import strtobool
 from flask import *
 from functools import wraps, update_wrapper
 from datetime import datetime
@@ -81,7 +82,7 @@ def course():
         if not course_id:
             return redirect(url_for('courses'))
         else:
-            isDownload = request.args.get('download', default=None, type=bool)
+            isDownload = strtobool(request.args.get('download', default=None))
             if isDownload:
                 course = download.download_course(session['token'], course_id)
                 with open(os.path.join(str(course_id), 'course_parser.dat'), mode='wb') as f:
@@ -124,7 +125,7 @@ def get_plan():
         if not course_id:
             return redirect(url_for('courses'))
         else:
-            isDownload = request.args.get('download', default=None, type=bool)
+            isDownload = strtobool(request.args.get('download', default=None))
             if isDownload:
                 course = download.download_course(session['token'], course_id)
                 with open(os.path.join(str(course_id), 'course_parser.dat'), mode='wb') as f:
@@ -138,7 +139,6 @@ def get_plan():
 def get_save_status():
     if 'token' in session:
         course_id = request.args.get('id', default=None, type=int)
-        
         if not course_id:
             return redirect(url_for('courses'))
         else:
