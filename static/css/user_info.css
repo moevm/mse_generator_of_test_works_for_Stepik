@@ -43,7 +43,7 @@ button {
     margin-left: 10px;
 }
 
-.form button:hover,.form button:active,.form button:focus {
+button:hover, button:active, button:focus {
     background: #43A047;
 }
 
