@@ -4,11 +4,23 @@
     <title>Страница пользователя</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/user_info.css') }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 <body>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<div id="id01" class="w3-modal">
+    <div class="w3-modal-content">
+      <div class="w3-container">
+        <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+          <p id="course-date"></p>
+          <p>Обновить курс?</p>
+          <button id="yes-btn">Да</button>
+          <button id="no-btn">Нет</button>
+      </div>
+    </div>
+</div>
 <div class="user-page">
     <div class="form">
-        <form class="user-form" action="{{ url_for('course') }}", method="GET">
             <div class="logout-button">
                 <a href={{ url_for('logout') }}>
                     <img id="logout" src="../static/icons/logout_icon.png" width="48px" height="48px">
@@ -24,7 +36,7 @@
             </div>
             <div class="input-group mb-3" id="course-selection">
                 <select name="id" class="custom-select" id="inputGroupSelect02">
-                    <option selected>Choose...</option>
+                    <option selected value="" disabled>Choose...</option>
                     {% for course in courses %}
                         <option value="{{ course['id'] }}">{{ course['title'] }}</title></option>
                     {% endfor %}
@@ -32,10 +44,58 @@
                 <div class="input-group-append">
                     <label class="input-group-text" for="inputGroupSelect02">Courses</label>
                 </div>
-                <button type="submit" id="select-button">Select</button>
+                <div class="w3-section">
+                    <input type="checkbox" id="isDownloadCheckbox" class="w3-input">
+                    <label for="isDownloadCheckbox">Download?</label>
+                    <p id="CourseDownloadInfo"></p>
+                </div>
+                <div id="buttons">
+                    <button id="select-button1">Генерация контрольной</button>
+                    <button id="select-button2">Учебный план</button>
+                </div>
             </div>
-        </form>
     </div>
 </div>
+<script>
+    var isDownloaded = false;
+    var createDate;
+
+    $(document).ready(function(){
+        $('#isDownloadCheckbox').prop('disabled', true);
+
+        $('#inputGroupSelect02').change(function () {
+            $.get(`/check?id=${$(this).val()}`, data => {
+                isDownloaded = data.isSave;
+                if (isDownloaded) {
+                    createDate = new Date(data.createDate).toLocaleDateString();
+                    
+                    $('#isDownloadCheckbox').prop('disabled', false);
+                    $('#isDownloadCheckbox').prop('checked', false);
+                    $('#CourseDownloadInfo').text(`Курс был скачан: ${createDate}`);
+                }
+                else {
+                    createDate = "";
+                    $('#isDownloadCheckbox').prop('checked', true);
+                    $('#isDownloadCheckbox').prop('disabled', true);
+                    $('#CourseDownloadInfo').text(`Курс ещё не скачан`);
+                }
+            })
+        })
+
+        $('#select-button1').click(() => {
+            let id = $('#inputGroupSelect02').val();
+            let isDownload = $('#isDownloadCheckbox').prop('checked');
+
+            window.location = `/course?id=${id}&download=${isDownload}`;
+        });
+
+        $('#select-button2').click(() => {
+            let id = $('#inputGroupSelect02').val();
+            let isDownload = $('#isDownloadCheckbox').prop('checked');
+
+            window.location = `/plan?id=${id}&download=${isDownload}`;
+        });
+    });
+</script>
 </body>
 </html>

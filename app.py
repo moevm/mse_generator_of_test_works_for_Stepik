@@ -3,12 +3,15 @@
 import sys
 sys.path.append('./src')
 
-from flask import Flask, render_template, request, send_file, session, redirect, url_for, make_response, jsonify
+from distutils.util import strtobool
+from flask import *
 from functools import wraps, update_wrapper
 from datetime import datetime
 import user
 import download
 import os
+import requests
+import json
 import pickle
 import pathlib
 import convert
@@ -26,25 +29,49 @@ def nocache(view):
     return update_wrapper(no_cache, view)
 
 app = Flask(__name__)
-app.secret_key = 'A0Zr37w/3rX R~XHH-jmm]LSX/,?RT'
+
+with open('config.json', 'r') as f:
+    config = json.load(f)
+    app.secret_key = config['secret_key']
+    client_id = config['client_id']
+    client_secret = config['client_secret']
+    redirect_uri = config['redirect_uri']
 
 @app.route('/')
 @nocache
 def index():
-    if 'token' in session:
-        return redirect(url_for('courses'))
-    else:    
-        return render_template('index.html')
+    return render_template('index.html',
+        login_url=f'https://stepik.org/oauth2/authorize/?response_type=code&client_id={client_id}&redirect_uri={redirect_uri}'
+    )
+        
+@app.route('/auth/code')
+def auth_code():
+    code = request.args.get('code', default=None)
+    if not code:
+        flash('Ошибка авторизации!', 'error')
+        return redirect(url_for('index'))
+    
+    auth = requests.auth.HTTPBasicAuth(client_id, client_secret)
+    response = requests.post('https://stepik.org/oauth2/token/',
+                            data={
+                                'grant_type': 'authorization_code',
+                                'code': code,
+                                'redirect_uri': redirect_uri
+                                },
+                            auth=auth)
+    response = response.json()
 
-@app.route('/login', methods=['POST'])
-def login():
-    token = user.get_token(request.form['client_id'], request.form['client_secret'])
+    try:
+        token = response['access_token']
+    except:
+        flash('Ошибка авторизации!', 'error')
+        return redirect(url_for('index'))
+    
+    session.permanent = True
+    app.permanent_session_lifetime = response['expires_in']
+    session['token'] = token
 
-    if not token:
-        return 'Unable to authorize with provided credentials'
-    else:
-        session['token'] = token
-        return redirect(url_for('courses'))
+    return redirect(url_for('courses'))
 
 @app.route('/courses')
 @nocache
@@ -80,8 +107,8 @@ def course():
         if not course_id:
             return redirect(url_for('courses'))
         else:
-            isDownload = request.args.get('download', default=None, type=bool)
-            if not isDownload:
+            isDownload = strtobool(request.args.get('download', default=None))
+            if isDownload:
                 course = download.download_course(session['token'], course_id)
                 with open(os.path.join(str(course_id), 'course_parser.dat'), mode='wb') as f:
                     pickle.dump(course, f)
@@ -104,13 +131,18 @@ def generate():
         if module.get_name() in selected_modules:
             module.choose()
 
-    convert.generating_works(course, request.form['name'], 
+    result = convert.generating_works(course, request.form['name'], 
                                 int(request.form['var_qty']), int(request.form['task_qty']))
-    zip_path = convert.archive()
 
-    return send_file(zip_path, 'application/zip')
-
+    if result:
+        zip_path = convert.archive(course)
+        return send_file(zip_path, 'application/zip')
+    else:
+        flash('Отсутствуют задания для генерации', 'error')
+        return redirect(url_for('course', id=request.form['course_id'], download=False))
+    
 @app.route('/plan')
+@nocache
 def get_plan():
     if 'token' in session:
         course_id = request.args.get('id', default=None, type=int)
@@ -118,11 +150,13 @@ def get_plan():
         if not course_id:
             return redirect(url_for('courses'))
         else:
-            isDownload = request.args.get('download', default=None, type=bool)
-            if not isDownload:
-                download.download_course(session['token'], course_id)
-            
-            return send_file('plan.pdf', 'application/pdf')
+            isDownload = strtobool(request.args.get('download', default=None))
+            if isDownload:
+                course = download.download_course(session['token'], course_id)
+                with open(os.path.join(str(course_id), 'course_parser.dat'), mode='wb') as f:
+                    pickle.dump(course, f)
+                    
+            return send_file(os.path.join(str(course_id), 'plan.pdf'), 'application/pdf')
     else:
         return redirect(url_for('index'))
 
@@ -130,7 +164,6 @@ def get_plan():
 def get_save_status():
     if 'token' in session:
         course_id = request.args.get('id', default=None, type=int)
-        
         if not course_id:
             return redirect(url_for('courses'))
         else:

@@ -54,3 +54,22 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;      
 }
+
+
+#flash-msg-container {
+  width: 400px;
+  margin-top: 40px;
+  margin-left: 40px;
+  position: absolute;
+}
+
+#flash-msg {
+  color: #4CAF50;
+  background-color: white;
+  text-align: center;
+  line-height: 2.5;
+  overflow: hidden;
+  box-shadow: 0 0 10px black;
+  display: block;
+  animation: fadeOut 5s linear forwards;
+}
