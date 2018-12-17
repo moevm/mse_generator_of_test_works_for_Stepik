@@ -6,7 +6,7 @@ import requests
 import datetime
 import sys
 import re
-#from weasyprint import HTML
+from weasyprint import HTML
 
 
 class Course():
@@ -245,6 +245,6 @@ def download_course(token, course_id):
                     f.close()
     
     plan_path = os.path.join(data_path, 'plan.pdf')
-    #html = HTML(string=plan)
-    #html.write_pdf(plan_path)
+    html = HTML(string=plan)
+    html.write_pdf(plan_path)
     return _course
