@@ -21,13 +21,7 @@
       </div>
     {% endwith %}
     <div class="login-page">
-      <div class="form">
-        <form class="login-form" action="{{ url_for('login') }}", method="POST">
-          <input type="text" placeholder="client_id" name="client_id"/>
-          <input type="password" placeholder="client_secret" name="client_secret"/>
-          <button>login</button>
-        </form>
-      </div>
+      <a href="{{ login_url }}">login</a>
     </div>
   </body>
 </html>
