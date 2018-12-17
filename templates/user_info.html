@@ -21,6 +21,17 @@
 </div>
 <div class="user-page">
     <div class="form">
+            <div class="w3-display-topleft w3-margin-top" style="width: 100%">
+                <div class="w3-row">
+                    <div class="w3-col l12">
+                        <input class="w3-col l1 w3-input" type="checkbox" id="isDownloadCheckbox" style="margin-top: 5px">
+                        <label class="w3-col l3" for="isDownloadCheckbox">Скачать курс</label>
+                    </div>
+                </div>
+                <div class="w3-row">
+                    <div class="w3-col l5" id="CourseDownloadInfo"></div>
+                </div>
+            </div>
             <div class="logout-button">
                 <a href={{ url_for('logout') }}>
                     <img id="logout" src="../static/icons/logout_icon.png" width="48px" height="48px">
@@ -28,34 +39,28 @@
             </div>
             <div class="user-name">
                 <h4>
-                    Hello,
+                    Здравствуйте,
                 </h4>
                 <h3 name="user_name">
                     {{ name }}
                 </h3>
             </div>
             <div class="input-group mb-3" id="course-selection">
-                <select name="id" class="custom-select" id="inputGroupSelect02">
-                    <option selected value="" disabled>Choose...</option>
-                    {% for course in courses %}
-                        <option value="{{ course['id'] }}">{{ course['title'] }}</title></option>
-                    {% endfor %}
-                </select>
-                <div class="input-group-append">
-                    <label class="input-group-text" for="inputGroupSelect02">Courses</label>
-                </div>
-                <div class="w3-section">
-                    <input type="checkbox" id="isDownloadCheckbox" class="w3-input">
-                    <label for="isDownloadCheckbox">Download?</label>
-                    <p id="CourseDownloadInfo"></p>
-                </div>
-                <div class="w3-row">
-                    <div class="w3-col l5">
-                        <button id="select-button1">Генерация контрольной</button>
+                <div class="w3-row" style="width: 100%">
+                    <select name="id" class="custom-select w3-col s10 m10 l10" id="inputGroupSelect02">
+                        <option selected value="" disabled>Choose...</option>
+                        {% for course in courses %}
+                            <option value="{{ course['id'] }}">{{ course['title'] }}</title></option>
+                        {% endfor %}
+                    </select>
+                    <div class="input-group-append w3-col s2 m2 l2">
+                        <label class="input-group-text" for="inputGroupSelect02">Курсы</label>
                     </div>
-                    <div class="w3-col l5">
-                        <button id="select-button2">Учебный план</button>
-                    </div>
+                </div>
+                <div class="w3-row w3-margin-top" style="width: 100%">
+                    <button class="w3-col l5" id="select-button1">Контрольная</button>
+                    <p class="w3-col l2">  </p>
+                    <button class="w3-col l5" id="select-button2">Учебный план</button>
                 </div>
             </div>
     </div>
