@@ -71,12 +71,13 @@
                     
                     $('#isDownloadCheckbox').prop('disabled', false);
                     $('#isDownloadCheckbox').prop('checked', false);
-                    $('#CourseDownloadInfo').text(`Курс был скачан: ${createDate}<br>${}`);
+                    $('#CourseDownloadInfo').text(`Курс был скачан: ${createDate}`);
                 }
                 else {
                     createDate = "";
                     $('#isDownloadCheckbox').prop('checked', true);
                     $('#isDownloadCheckbox').prop('disabled', true);
+                    $('#CourseDownloadInfo').text(`Курс ещё не скачан`);
                 }
             })
         })
