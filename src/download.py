@@ -197,10 +197,9 @@ def download_course(token, course_id):
 
             step_ids = lesson['steps']
             steps = fetch_objects('step', step_ids, token=token)  # Степы
-            if section == sections[0]:
-                if unit == units[0]:
-                    if (steps[0]['block']['name']) == 'text':
-                        plan += '<div>' + '<h3>{}</h3>'.format(section['title']) + steps[0]['block']['text'] + '</div>'
+            if unit == units[0]:
+                if (steps[0]['block']['name']) == 'text':
+                    plan += '<div>' + '<h3>{}</h3>'.format(section['title']) + steps[0]['block']['text'] + '</div>'
             for step in steps:  # Итерация по степам
                 if step['block']['name'] in ('choice', 'number', 'string'):
                     _step = Step(_lesson, step['block']['name'])
