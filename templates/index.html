@@ -21,7 +21,11 @@
       </div>
     {% endwith %}
     <div class="login-page">
-      <a href="{{ login_url }}">login</a>
-    </div>
+      <div class="form">
+        <div class="login-form" method="GET">
+          <button onclick="window.location = '{{ login_url }}'">Авторизоваться через Stepic</button>
+        </div>
+      </div>
+</div>
   </body>
 </html>
