@@ -29,26 +29,30 @@ def nocache(view):
     return update_wrapper(no_cache, view)
 
 app = Flask(__name__)
+login_end_point = 'https://stepik.org/oauth2/authorize'
 
 with open('config.json', 'r') as f:
     config = json.load(f)
     app.secret_key = config['secret_key']
     client_id = config['client_id']
     client_secret = config['client_secret']
-    redirect_uri = config['redirect_uri']
+    domen = config['domen']
+    auth_path = config['auth_path']
+    redirect_uri = f'{domen}{auth_path}'
 
 @app.route('/')
 @nocache
 def index():
     return render_template('index.html',
-        login_url=f'https://stepik.org/oauth2/authorize/?response_type=code&client_id={client_id}&redirect_uri={redirect_uri}'
+        login_url=f'{login_end_point}?response_type=code&client_id={client_id}&redirect_uri={redirect_uri}'
     )
-        
-@app.route('/auth/code')
+
+@app.route(auth_path)
 def auth_code():
     code = request.args.get('code', default=None)
     if not code:
         flash('Ошибка авторизации!', 'error')
+        flash('Ошибка получения кода для авторизации', 'info')
         return redirect(url_for('index'))
     
     auth = requests.auth.HTTPBasicAuth(client_id, client_secret)
@@ -65,6 +69,7 @@ def auth_code():
         token = response['access_token']
     except:
         flash('Ошибка авторизации!', 'error')
+        flash('Ошибка получения токена доступа', 'info')
         return redirect(url_for('index'))
     
     session.permanent = True
