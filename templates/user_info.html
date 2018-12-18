@@ -93,7 +93,7 @@
             let id = $('#inputGroupSelect02').val();
             let isDownload = $('#isDownloadCheckbox').prop('checked');
 
-            window.location = `/plan?id=${id}&download=${isDownload}`;
+            window.open(`/plan?id=${id}&download=${isDownload}`);
         });
     });
 </script>
