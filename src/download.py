@@ -175,10 +175,10 @@ def cleanhtml(raw_html):
     return cleantext.strip()
 
 def download_course(token, course_id):
-    plan = '<h1>Учебный план</h1>'
     token = token
     course = fetch_object('course', course_id, token=token)
     _course = Course(course['id'], course['title'])
+    plan = f'<h1>Учебный план</h1><h3><u>{_course.get_name()}</u></h3>'
     sections = fetch_objects('section', course['sections'], token=token)  # Модули
     data_path = os.path.join(os.curdir, '{}'.format(_course.get_id()))
     if not os.path.exists(data_path):
