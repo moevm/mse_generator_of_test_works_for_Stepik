@@ -52,12 +52,6 @@ button {
     width: 100%;
 }
 
-#buttons {
-    margin-top: 20px;
-    margin-left: 30px;
-    display: flex;
-}
-
 #logout {
     margin-left: 95%;
     cursor: pointer;
