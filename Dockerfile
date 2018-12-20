@@ -15,6 +15,9 @@ RUN apt-get update && apt-get install -y \
     shared-mime-info \
     locales
 
+RUN locale-gen ru_RU.UTF-8
+ENV LANG='ru_RU.UTF-8' LANGUAGE='ru_RU:ru' LC_ALL='ru_RU.UTF-8'
+
 COPY ./requirements.txt /app/requirements.txt
 
 WORKDIR /app
@@ -22,8 +25,5 @@ WORKDIR /app
 RUN pip3 install -r requirements.txt
 
 COPY . /app
-
-RUN locale-gen ru_RU.UTF-8
-ENV LANG='ru_RU.UTF-8' LANGUAGE='ru_RU:ru' LC_ALL='ru_RU.UTF-8'
 
 CMD ["python3", "app.py"]
