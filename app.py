@@ -38,6 +38,7 @@ with open('config.json', 'r') as f:
     client_secret = config['client_secret']
     domen = config['domen']
     auth_path = config['auth_path']
+    debug = config['debug']
     redirect_uri = f'{domen}{auth_path}'
 
 @app.route('/')
@@ -194,4 +195,4 @@ def logout():
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=debug, host='0.0.0.0')
