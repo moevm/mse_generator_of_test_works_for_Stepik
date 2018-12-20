@@ -91,7 +91,25 @@
             let id = $('#inputGroupSelect02').val();
             let isDownload = $('#isDownloadCheckbox').prop('checked');
 
-            window.open(`/plan?id=${id}&download=${isDownload}`);
+            newWin = window.open(`/plan?id=${id}&download=${isDownload}`);
+            newWin.onload = function() {
+                $.get(`/check?id=${$('#inputGroupSelect02').val()}`, data => {
+                isDownloaded = data.isSave;
+                if (isDownloaded) {
+                    createDate = new Date(data.createDate).toLocaleDateString();
+                    
+                    $('#isDownloadCheckbox').prop('disabled', false);
+                    $('#isDownloadCheckbox').prop('checked', false);
+                    $('#CourseDownloadInfo').text(`Курс был скачен: ${createDate}`);
+                }
+                else {
+                    createDate = "";
+                    $('#isDownloadCheckbox').prop('checked', true);
+                    $('#isDownloadCheckbox').prop('disabled', true);
+                    $('#CourseDownloadInfo').text(`Курс ещё не скачен`);
+                }
+            })  
+            };
         });
     });
 </script>
