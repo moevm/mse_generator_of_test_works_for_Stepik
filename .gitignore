@@ -1,6 +1,7 @@
 /.vscode/
 /.idea/
 /48418/
+/48421/
 *.pyc
 .DS_Store
 config.json
